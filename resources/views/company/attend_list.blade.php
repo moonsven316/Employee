@@ -12,7 +12,7 @@
                 <div class="x_content">
                     <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">日表示</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">勤怠詳細</a>
                         </li>
                         <li class="nav-item">
                             {{-- <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">シフト設定</a> --}}
@@ -67,11 +67,15 @@
                                             <tr>
                                                 <th class="text-center">No</th>
                                                 <th class="text-center">従業員ID</th>
-                                                <th class="text-center">氏名</th>
+                                                <th class="text-center">従業員名</th>
                                                 <th class="text-center">出勤状態</th>
-                                                <th class="text-center">休憩、稼働時間</th>
-                                                <th class="text-center">電話番号</th>
-                                                <th class="text-center">新規追加</th>
+                                                <th class="text-center">出勤時刻</th>
+                                                <th class="text-center">退勤時刻</th>
+                                                <th class="text-center">総労働時間</th>
+                                                <th class="text-center">休憩時間</th>
+                                                <th class="text-center">残業時間</th>
+                                                <th class="text-center">深夜労働時間</th>
+                                                <th class="text-center">備考</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -83,12 +87,17 @@
                                                 <td class="text-center">{{ $index }}</td>
                                                 <?php $user = App\Models\User::find($att->user_id); ?>
                                                 <td class="text-center"> @if(isset($user->name)) {{ $user->name }} @endif </td>
-                                                <td class="text-center">{{ $att->user_name }}</td>
+                                                <td class="text-center"><a href="{{ route('company.user_attend', $att->user_id) }}" style="text-decoration: underline;">{{ $att->user_name }}</a></td>
                                                 <?php 
                                                     $today = date('d');
                                                     $sh = json_decode($att["s".$today]);
                                                     $ah = json_decode($att["a".$today]);
+                                                    $note_ = json_decode($att->notes);
+                                                    $note_key = "a".$today;
+                                                    $note = $note_->$note_key;
                                                     $sel_sheet = "";
+                                                    $current_time = explode(" ", date("Y-m-d H:i:s"))[1];
+                                                    // dd(strtotime($current_time));
                                                     if (isset($sh)) {
                                                         foreach($sheets as $sheet){
                                                             if($sheet->id == $sh->sh){
@@ -96,23 +105,49 @@
                                                             }
                                                         }
                                                     }
-                                                    if($att["s".$today] == "" && $att["a".$today] == "") {
-
+                                                    if ($att["s".$today] == "" && $att["a".$today] == "") {
                                                         echo '<td class="text-center"></td>';
-                                                        echo '<td class="text-center"></td>';
-
+                                                        echo '<td class="text-center">00:00</td>';
+                                                        echo '<td class="text-center">00:00</td>';
+                                                        echo '<td class="text-center">00:00</td>';
+                                                        echo '<td class="text-center">00:00</td>';
+                                                        echo '<td class="text-center">00:00</td>';
+                                                        echo '<td class="text-center">00:00</td>';
                                                     } elseif ($att["s".$today] !="" && $att["a".$today] == "") {
-
-                                                        if ($sh->ot != "" || $sh->ct != "") {
-
-                                                            echo '<td class="text-center" style="background-color: red; padding: 0;"><div style="color:#fff; font-size:15px; background-color:red;" class="py-2">欠勤</div></td>';
-                                                            echo '<td class="text-center"></td>';
-
+                                                        if ($user->status == 1) {
+                                                            echo '<td class="text-center" style="background-color: rgb(225, 255, 0); padding: 0;"><div style="color:#fff; font-size:15px; background-color: rgb(225, 255, 0);" class="py-2">休職</div></td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                        } elseif ($sh->ot != "" || $sh->ct != "") {
+                                                            if (strtotime($sh->ot) > strtotime($current_time)) {
+                                                                echo '<td class="text-center" style="background-color: #007bff; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#007bff;" class="py-2">出勤予定</div></td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                            } else {
+                                                                echo '<td class="text-center" style="background-color: red; padding: 0;"><div style="color:#fff; font-size:15px; background-color:red;" class="py-2">欠勤</div></td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                            }
                                                         } else {
-
-                                                                echo "<td class='text-center' style='background-color: ".$sel_sheet->sheet_color."; padding: 0;'><div style='color:#fff; font-size:15px; background-color:".$sel_sheet->sheet_color."' class='py-2'>".$sel_sheet->sheet_name_1."</div></td>";
-                                                                echo '<td class="text-center"></td>';
-
+                                                            echo "<td class='text-center' style='background-color: ".$sel_sheet->sheet_color."; padding: 0;'><div style='color:#fff; font-size:15px; background-color:".$sel_sheet->sheet_color."' class='py-2'>".$sel_sheet->sheet_name_1."</div></td>";
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
+                                                            echo '<td class="text-center">00:00</td>';
                                                         }
                                                     }
                                                     if (isset($ah)) {
@@ -120,33 +155,322 @@
                                                         $ah_ot = strtotime($ah->ot);
                                                         $sh_ct = strtotime($sh->ct);
                                                         $ah_ct = strtotime($ah->ct);
+                                                        $nightStandardOpenTime = strtotime("22:00");
+                                                        $nightStandardCloseTime = strtotime("05:00");
                                                         if ($sh_ct > $ah_ct) {
+                                                            if ($user->status == 1) {
 
-                                                            echo '<td class="text-center" style="background-color: pink; padding: 0;"><div style="color:#fff; font-size:15px; background-color:pink;" class="py-2">早退</div></td>';
-                                                            echo '<td class="text-center"></td>';
-                
+                                                                echo '<td class="text-center" style="background-color: rgb(225, 255, 0); padding: 0;"><div style="color:#fff; font-size:15px; background-color: rgb(225, 255, 0);" class="py-2">休職</div></td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+                                                                echo '<td class="text-center">00:00</td>';
+
+                                                            } elseif (!empty($ah_ot) && empty($ah_ct)) {
+
+                                                                echo '<td class="text-center" style="background-color: pink; padding: 0;"><div style="color:#fff; font-size:15px; background-color:pink;" class="py-2">早退</div></td>';
+                                                                echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                list($end_hours, $end_minutes) = explode(':', $current_time);
+                                                                $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                $total_work_time_ = $total_start_minutes + $total_end_minutes;
+                                                                $hours = floor($total_work_time_ / 60);
+                                                                $minutes = $total_work_time_ % 60;
+                                                                $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                $restOpenTime = strtotime($ah->rs);
+                                                                $restCloseTime = strtotime($ah->re);
+                                                                $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                $standardTime = $sh_ct - $sh_ot;
+                                                                $stampTime = $ah_ct - $ah_ot;
+                                                                $overTime = $stampTime - $standardTime;
+                                                                echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                } else {
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                }
+
+                                                            } else {
+
+                                                                echo '<td class="text-center" style="background-color: pink; padding: 0;"><div style="color:#fff; font-size:15px; background-color:pink;" class="py-2">早退</div></td>';
+                                                                echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                list($end_hours, $end_minutes) = explode(':', $ah->ct);
+                                                                $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                $total_work_time_ = $total_start_minutes + $total_end_minutes;
+                                                                $hours = floor($total_work_time_ / 60);
+                                                                $minutes = $total_work_time_ % 60;
+                                                                $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                $restOpenTime = strtotime($ah->rs);
+                                                                $restCloseTime = strtotime($ah->re);
+                                                                $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                $standardTime = $sh_ct - $sh_ot;
+                                                                $stampTime = $ah_ct - $ah_ot;
+                                                                $overTime = $stampTime - $standardTime;
+                                                                echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                } else {
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                }
+
+                                                            }
+                                                        } elseif ($sh_ct <= $ah_ct) {
+                                                            echo '<td class="text-center" style="background-color: #007bff; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#007bff;" class="py-2">退勤済み</div></td>';
+                                                            echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                            echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                            list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                            list($end_hours, $end_minutes) = explode(':', $ah->ct);
+                                                            $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                            $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                            $total_work_time_ =  $total_end_minutes - $total_start_minutes;
+                                                            $hours = floor($total_work_time_ / 60);
+                                                            $minutes = $total_work_time_ % 60;
+                                                            $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                            echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                            $restOpenTime = strtotime($ah->rs);
+                                                            $restCloseTime = strtotime($ah->re);
+                                                            $total_rest_time = $restCloseTime - $restOpenTime;
+                                                            echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                            $standardTime = $sh_ct - $sh_ot;
+                                                            $stampTime = $ah_ct - $ah_ot;
+                                                            $overTime = $stampTime - $standardTime;
+                                                            echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                            if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                $stampTime = $ah_ct - $ah_ot;
+                                                                echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                            } else {
+                                                                echo '<td class="text-center">00:00</td>';
+                                                            }
                                                         } else {
                                                             if ($sh_ot < $ah_ot) {
-                                                                
-                                                                echo '<td class="text-center" style="background-color: #ffc107; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#ffc107;" class="py-2">遅刻</div></td>';
-                                                                echo '<td class="text-center"></td>';
-                
-                                                            } elseif ($sh_ot > $ah_ot) {
-                
-                                                                echo '<td class="text-center" style="background-color: #007bff; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#007bff;" class="py-2">出勤</div></td>';
-                                                                echo '<td class="text-center">'.$ah->rs.'~'.$ah->re.', '.$ah->ot.'~'.$ah->ct.'</td>';
-                
-                                                            } elseif ($sh_ct > $ah_ot) {
-                
-                                                                echo '<td class="text-center" style="background-color: red; padding: 0;"><div style="color:#fff; font-size:15px; background-color:red;" class="py-2">欠勤</div></td>';
-                                                                echo '<td class="text-center"></td>';
-                
+                                                                if ($user->status == 1) {
+
+                                                                    echo '<td class="text-center" style="background-color: rgb(225, 255, 0); padding: 0;"><div style="color:#fff; font-size:15px; background-color: rgb(225, 255, 0);" class="py-2">休職</div></td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+
+                                                                } elseif (!empty($ah_ot) && empty($ah_ct)) {
+
+                                                                    echo '<td class="text-center" style="background-color: #ffc107; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#ffc107;" class="py-2">遅刻</div></td>';
+                                                                    echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                    echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                    list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                    list($end_hours, $end_minutes) = explode(':', $current_time);
+                                                                    $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                    $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                    $total_work_time_ = $total_start_minutes + $total_end_minutes;
+                                                                    $hours = floor($total_work_time_ / 60);
+                                                                    $minutes = $total_work_time_ % 60;
+                                                                    $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                    echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                    $restOpenTime = strtotime($ah->rs);
+                                                                    $restCloseTime = strtotime($ah->re);
+                                                                    $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                    $standardTime = $sh_ct - $sh_ot;
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    $overTime = $stampTime - $standardTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                    if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                        $stampTime = $ah_ct - $ah_ot;
+                                                                        echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                    } else {
+                                                                        echo '<td class="text-center">00:00</td>';
+                                                                    }
+
+                                                                } else {
+
+                                                                    echo '<td class="text-center" style="background-color: #ffc107; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#ffc107;" class="py-2">遅刻</div></td>';
+                                                                    echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                    echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                    list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                    list($end_hours, $end_minutes) = explode(':', $ah->ct);
+                                                                    $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                    $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                    $total_work_time_ = $total_start_minutes + $total_end_minutes;
+                                                                    $hours = floor($total_work_time_ / 60);
+                                                                    $minutes = $total_work_time_ % 60;
+                                                                    $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                    echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                    $restOpenTime = strtotime($ah->rs);
+                                                                    $restCloseTime = strtotime($ah->re);
+                                                                    $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                    $standardTime = $sh_ct - $sh_ot;
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    $overTime = $stampTime - $standardTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                    if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                        $stampTime = $ah_ct - $ah_ot;
+                                                                        echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                    } else {
+                                                                        echo '<td class="text-center">00:00</td>';
+                                                                    }
+
+                                                                }
+                                                            } elseif ($sh_ot >= $ah_ot) {
+                                                                if ($user->status == 1) {
+
+                                                                    echo '<td class="text-center" style="background-color: rgb(225, 255, 0); padding: 0;"><div style="color:#fff; font-size:15px; background-color: rgb(225, 255, 0);" class="py-2">休職</div></td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+
+                                                                } elseif (!empty($ah_ot) && empty($ah_ct)) {
+
+                                                                    echo '<td class="text-center" style="background-color: #007bff; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#007bff;" class="py-2">出勤中</div></td>';
+                                                                    echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                    echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                    dd($current_time);
+                                                                    list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                    list($end_hours, $end_minutes) = explode(':', $current_time);
+                                                                    $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                    $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                    $total_work_time_ =  $total_end_minutes - $total_start_minutes;
+                                                                    $hours = floor($total_work_time_ / 60);
+                                                                    $minutes = $total_work_time_ % 60;
+                                                                    $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                    echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                    $restOpenTime = strtotime($ah->rs);
+                                                                    $restCloseTime = strtotime($ah->re);
+                                                                    $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                    $standardTime = $sh_ct - $sh_ot;
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    $overTime = $stampTime - $standardTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                    if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                        $stampTime = $ah_ct - $ah_ot;
+                                                                        echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                    } else {
+                                                                        echo '<td class="text-center">00:00</td>';
+                                                                    }
+
+                                                                } else {
+
+                                                                    echo '<td class="text-center" style="background-color: #007bff; padding: 0;"><div style="color:#fff; font-size:15px; background-color:#007bff;" class="py-2">出勤</div></td>';
+                                                                    echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                    echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                    list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                    list($end_hours, $end_minutes) = explode(':', $ah->ct);
+                                                                    $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                    $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                    $total_work_time_ =  $total_end_minutes - $total_start_minutes;
+                                                                    $hours = floor($total_work_time_ / 60);
+                                                                    $minutes = $total_work_time_ % 60;
+                                                                    $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                    echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                    $restOpenTime = strtotime($ah->rs);
+                                                                    $restCloseTime = strtotime($ah->re);
+                                                                    $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                    $standardTime = $sh_ct - $sh_ot;
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    $overTime = $stampTime - $standardTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                    if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                        $stampTime = $ah_ct - $ah_ot;
+                                                                        echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                    } else {
+                                                                        echo '<td class="text-center">00:00</td>';
+                                                                    }
+
+                                                                }
+                                                            } elseif ($sh_ct < $ah_ot) {
+                                                                if ($user->status == 1) {
+
+                                                                    echo '<td class="text-center" style="background-color: rgb(225, 255, 0); padding: 0;"><div style="color:#fff; font-size:15px; background-color: rgb(225, 255, 0);" class="py-2">休職</div></td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+                                                                    echo '<td class="text-center">00:00</td>';
+
+                                                                } elseif (!empty($ah_ot) && empty($ah_ct)) {
+
+                                                                    echo '<td class="text-center" style="background-color: red; padding: 0;"><div style="color:#fff; font-size:15px; background-color:red;" class="py-2">欠勤</div></td>';
+                                                                    echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                    echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                    list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                    list($end_hours, $end_minutes) = explode(':', $current_time);
+                                                                    $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                    $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                    $total_work_time_ = $total_start_minutes + $total_end_minutes;
+                                                                    $hours = floor($total_work_time_ / 60);
+                                                                    $minutes = $total_work_time_ % 60;
+                                                                    $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                    echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                    $restOpenTime = strtotime($ah->rs);
+                                                                    $restCloseTime = strtotime($ah->re);
+                                                                    $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                    $standardTime = $sh_ct - $sh_ot;
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    $overTime = $stampTime - $standardTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                    if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                        $stampTime = $ah_ct - $ah_ot;
+                                                                        echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                    } else {
+                                                                        echo '<td class="text-center">00:00</td>';
+                                                                    }
+
+                                                                } else {
+
+                                                                    echo '<td class="text-center" style="background-color: red; padding: 0;"><div style="color:#fff; font-size:15px; background-color:red;" class="py-2">欠勤</div></td>';
+                                                                    echo '<td class="text-center">'.$ah->ot.'</td>';
+                                                                    echo '<td class="text-center">'.$ah->ct.'</td>';
+                                                                    list($start_hours, $start_minutes) = explode(':', $ah->ot);
+                                                                    list($end_hours, $end_minutes) = explode(':', $ah->ct);
+                                                                    $total_start_minutes = $start_hours * 60 + $start_minutes;
+                                                                    $total_end_minutes = $end_hours * 60 + $end_minutes;
+                                                                    $total_work_time_ = $total_start_minutes + $total_end_minutes;
+                                                                    $hours = floor($total_work_time_ / 60);
+                                                                    $minutes = $total_work_time_ % 60;
+                                                                    $total_work_time = sprintf("%02d:%02d", $hours, $minutes);
+                                                                    echo '<td class="text-center">'.$total_work_time.'</td>';
+                                                                    $restOpenTime = strtotime($ah->rs);
+                                                                    $restCloseTime = strtotime($ah->re);
+                                                                    $total_rest_time = $restCloseTime - $restOpenTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $total_rest_time).'</td>';
+                                                                    $standardTime = $sh_ct - $sh_ot;
+                                                                    $stampTime = $ah_ct - $ah_ot;
+                                                                    $overTime = $stampTime - $standardTime;
+                                                                    echo '<td class="text-center">'.gmdate("H:i", $overTime).'</td>';
+                                                                    if ($ah_ot >= $nightStandardOpenTime && $ah_ct <= $nightStandardCloseTime) {
+                                                                        $stampTime = $ah_ct - $ah_ot;
+                                                                        echo '<td class="text-center">'.gmdate("H:i", $stampTime).'</td>';
+                                                                    } else {
+                                                                        echo '<td class="text-center">00:00</td>';
+                                                                    }
+                                                                    
+                                                                }
                                                             }
                                                         }  
                                                     }
                                                 ?>
-                                                <td class="text-center"> @if(isset($user->phone)) {{ $user->phone }} @endif </td>
-                                                <td class="text-center"> <a href="{{ route('company.user_attend', $att->user_id) }}">詳細</a></td>
+                                                <td class="text-center"><?=$note?></td>
                                             </tr>
                                             <?php
                                                 ++$index;
@@ -280,7 +604,7 @@
 @endsection
 @section('script')
     <script>
-        function getAttend() {
+        function getAttend() {                       
             $("#getattend").submit();
         }
         function getSubDepart(){

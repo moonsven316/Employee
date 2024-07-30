@@ -6,21 +6,21 @@
             position: sticky !important;
             left: 0;
             background-color: #fff !important;
-            z-index: 9999999;
+            z-index: 999;
         }
         th:nth-child(2), td:nth-child(2) {
             position: -webkit-sticky;
             position: sticky !important;
             left: 63px;
             background-color: #fff !important;
-            z-index: 9999999;
+            z-index: 999;
         }
         th:nth-child(3), td:nth-child(3) {
             position: -webkit-sticky;
             position: sticky !important;
             left: 123px;
             background-color: #fff !important;
-            z-index: 9999999;
+            z-index: 999;
         }
     </style>
 @endsection
@@ -37,7 +37,7 @@
                 <div class="x_content">
                     <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link" id="home-tab" href="{{ route('company.attend_list') }}" aria-selected="false">日表示</a>
+                            <a class="nav-link" id="home-tab" href="{{ route('company.attend_list') }}" aria-selected="false">勤怠詳細</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">シフト設定</a>
@@ -45,7 +45,7 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fadeshow active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <div class="x_panel">
                                     <div class="x_title">
                                         <h2>シフト設定</h2>
@@ -81,36 +81,68 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div> --}}
+                            <div class="col-lg-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>検索項目</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                                        <form action="{{ route('attendList.month') }}" method="post" class="form-inline">
+                                                            @csrf
+                                                            <div class="form-group mb-2">
+                                                                <select id="year" name="year" class="form-control mr-2" style="width:90px">
+                                                                    <?php 
+                                                                        if(empty($_REQUEST['year'])) $_REQUEST['year'] = date("Y");
+                                                                        for($y = 2023; $y < 2025; $y++){
+                                                                    ?>
+                                                                    <option value="{{$y}}" <?php if($_REQUEST['year'] == $y){?>selected<?php }?>>{{$y}}</option>
+                                                                    <?php }?>
+                                                                </select>
+                                                            </div>
+                                                
+                                                            <div class="form-group mb-2">
+                                                                <select id="month" name="month" class="form-control mr-2" style="width:70px">
+                                                                    <?php 
+                                                                        if(empty($_REQUEST['month'])) $_REQUEST['month'] = date("m");
+                                                                    ?>
+                                                                    @for($i = 1; $i < 13; $i++) 
+                                                                    <option value="{{$i}}" <?php if($_REQUEST['month'] == $i){?>selected<?php }?>>{{$i}}</option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                
+                                                            <div class="form-group mb-2">
+                                                                <label class="col-form-label mr-2">親部門</label>
+                                                                <select class="form-control mr-2" name="depart" id="depart" onchange="getSubDepart()">
+                                                                    <option value="0">親部門名選択</option>
+                                                                    @foreach ($departments as $depart)
+                                                                        <option value="{{ $depart->id }}">{{ $depart->depart }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                
+                                                            <div class="form-group mb-2">
+                                                                <label class="col-form-label mr-2">子部門</label>
+                                                                <select class="form-control mr-2" name="sub_depart" id="sub_depart">
+                                                                </select>
+                                                            </div>
+                                                
+                                                            <button class="btn btn-primary mb-2" type="submit">検索</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12">
-                                <form class="col-md-8 col-sm-12 form-group row gap-2 text-end" action="{{ route("attendList.month") }}" method="post">
-                                    @csrf
-                                    <select id="year" name="year" class="form-control" style="width:90px">
-                                        <?php 
-                                            if(empty($_REQUEST['year']))$_REQUEST['year'] = date("Y");
-                        
-                                            for($y = 2023; $y < 2025; $y++){
-                                        ?>
-                                        <option value="{{$y}}"
-                                        <?php if($_REQUEST['year'] == $y){?>selected<?php }?>
-                                        >{{$y}}</option>
-                                        <?php }?>
-                                    </select>
-                        
-                                    <select id="month" name="month" class="form-control" style="width:70px">
-                                        <?php 
-                                            if(empty($_REQUEST['month']))$_REQUEST['month'] = date("m");
-                                        ?>
-                                        @for($i = 1; $i < 13; $i++) 
-                                        <option 
-                                        <?php if($_REQUEST['month'] == $i){?>selected<?php }?>
-                        
-                                        value="{{$i}}"
-                                        >{{$i}}</option>
-                                        @endfor
-                                    </select>
-                                    <button class="btn btn-primary" type="submit">検索</button>
-                                </form>
                                 <div class="table-responsive">
                                     <table id="datatable-buttons" class="table table-striped table-bordered bulk_action" style="width:100%">
                                         <thead>
@@ -153,7 +185,7 @@
                                                 <th class="text-center text-success" style="min-width: 55px;">遅刻<br>日数</th>
                                                 <th class="text-center text-warning" style="min-width: 55px;">早退<br>日数</th>
                                                 <th class="text-center text-danger" style="min-width: 55px;">欠勤<br>日数</th>
-                                                <th class="text-center" style="min-width: 55px;">総時間<br>稼働時間</th>
+                                                <th class="text-center" style="min-width: 85px;">所定労働時間<br>稼働時間</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -162,6 +194,7 @@
                                                 $time = 0;
                                             ?>
                                             @foreach($attends as $att)
+                                            <?php $user = App\Models\User::find($att->user_id); ?>
                                             <tr class="even pointer">
                                                 <td class="a-center ">
                                                     <input type="checkbox" class="flat" name="table_records" value="{{ $att->user_id }}">
@@ -176,7 +209,8 @@
                                                 $behind_count = 0;
                                                 $early_count = 0;
                                                 $absent_count = 0;
-
+                                                $hours = 0;
+                                                $minutes = 0;
                                                 for($i = 1; $i < $numberOfDays +1; $i++){
                                                     $txt = "";
                                                     $sh = json_decode($att["s".$i]);
@@ -184,8 +218,18 @@
         
                                                     if (isset($ah->ot) || isset($ah->ct)) {
                                                         $uptime_ = strtotime($ah->ct) - strtotime($ah->ot);
+                                                        $rs_re_ = strtotime($ah->re) - strtotime($ah->rs);
                                                         // $uptime = gmdate('H:i', $uptime_);
                                                         $uptime += $uptime_ + $time;
+                                                        list($start_hours, $start_minutes) = explode(':', gmdate("H:i", $uptime_));
+                                                        list($end_hours, $end_minutes) = explode(':', gmdate("H:i", $rs_re_));
+                                                        $total_start_minutes = (int)$start_hours * 60 + (int)$start_minutes;
+                                                        $total_end_minutes = (int)$end_hours * 60 + (int)$end_minutes;
+                                                        $total_work_time_ = $total_start_minutes - $total_end_minutes;
+                                                        if ($total_work_time_ > 0) {
+                                                            $hours += floor($total_work_time_ / 60);
+                                                            $minutes += $total_work_time_ % 60;
+                                                        }
                                                     }
         
                                                     $today = date('d');
@@ -203,50 +247,48 @@
                                                         $txt = "<div></div>";
                                                     } elseif ($att["s".$i] !="" && $att["a".$i] == "") {
                                                         if ($sh->ot != "" || $sh->ct != "") {
-                                                            if ($toYear == $att['year'] && $toMonth == $att['month']) {
-                                                                if ($i > $today) {
-                                                                    $txt = "<div></div>";
-                                                                } else {
-                                                                    $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:red;'>欠勤</div>";
-                                                                    $absent_count++;
-                                                                }
-                                                            } else {
-                                                                $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:red;'>欠勤</div>";
-                                                                $absent_count++;
-                                                            }
-                                                        } else {
-                                                            // if ($sel_sheet != Null) {
-                                                                $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:".$sel_sheet->sheet_color."'>".$sel_sheet->sheet_name_1."</div>";
-                                                            // } else {
-                                                            //     $txt = "<div></div>";
-                                                            // }
-                                                            // var_dump (json_decode($sel_sheet));
+                                                                // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:red;'>欠勤</div>";
+                                                            $absent_count++;
                                                         }
+                                                        $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:".$sel_sheet->sheet_color."'>".$sel_sheet->sheet_name_1."</div>";
                                                     }
                                                     if (isset($ah)) {
+                                                        $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:".$sel_sheet->sheet_color."'>".$sel_sheet->sheet_name_1."</div>";
                                                         $sh_ot = strtotime($sh->ot);
                                                         $ah_ot = strtotime($ah->ot);
                                                         $sh_ct = strtotime($sh->ct);
                                                         $ah_ct = strtotime($ah->ct);
                                                         if ($sh_ct > $ah_ct) {
-                
-                                                            $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:pink;'>早退</div>";
-                                                            $early_count++;
+                                                            if ($user->status == 1) {
+                                                                // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color: rgb(225, 255, 0);'>休職</div>";
+                                                            } else {
+                                                                // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:pink;'>早退</div>";
+                                                                $early_count++;
+                                                            }
                 
                                                         } else {
                                                             if ($sh_ot < $ah_ot) {
-                                                                
-                                                                $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:#ffc107;'>遅刻</div>";
-                                                                $behind_count++;
+                                                                if ($user->status == 1) {
+                                                                    // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color: rgb(225, 255, 0);'>休職</div>";
+                                                                } else {
+                                                                    // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:#ffc107;'>遅刻</div>";
+                                                                    $behind_count++;
+                                                                }
                 
-                                                            } elseif ($sh_ot > $ah_ot) {
+                                                            } elseif ($sh_ot >= $ah_ot) {
+                                                                if ($user->status == 1) {
+                                                                    // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color: rgb(225, 255, 0);'>休職</div>";
+                                                                } else {
+                                                                    // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:#007bff;'>出勤</div>";
+                                                                    $work_count++;
+                                                                }
                 
-                                                                $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:#007bff;'>出勤</div>";
-                                                                $work_count++;
-                
-                                                            } elseif ($sh_ct > $ah_ot) {
-                
-                                                                $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:red;'>欠勤</div>";
+                                                            } elseif ($sh_ct < $ah_ot) {
+                                                                if ($user->status == 1) {
+                                                                    // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color: rgb(225, 255, 0);'>休職</div>";
+                                                                } else {
+                                                                    // $txt = "<div style='color:#fff; font-size:15px; padding: 10px 0 10px 0; background-color:red;'>欠勤</div>";
+                                                                }
                 
                                                             }
                                                         }
@@ -257,18 +299,32 @@
                                                     }
                 
                                                 ?>
-                                                <td class="text-center" style="padding: 0;"><?=$txt?></td>
+                                                <td class="text-center" style="padding: 0; cursor: pointer;" onclick="shift_set({{ $att->year }}, {{ $att->month }}, {{ $i }}, {{ $att->id }})"><?=$txt?></td>
                                                 <?php } ?>
+                                                @php
+                                                    $hours += floor($minutes / 60);
+                                                    $minutes = $minutes % 60;
+                                                @endphp
                                                 <td class="text-center"><?=$work_count?></td>
                                                 <td class="text-center"><?=$behind_count?></td>
                                                 <td class="text-center"><?=$early_count?></td>
                                                 <td class="text-center"><?=$absent_count?></td>
                                                 <td class="text-center" style="padding: 0;">
-                                                    <?php $workTime = App\Models\User::find($att->user_id); ?>
-                                                    {{ $workTime->total_work_time }}時間
+                                                    <?php 
+                                                        if ($numberOfDays == 28) {
+                                                            $workTime = App\Models\User::find($att->user_id)->first_day; 
+                                                        } elseif ($numberOfDays == 29) {
+                                                            $workTime = App\Models\User::find($att->user_id)->second_day; 
+                                                        } elseif ($numberOfDays == 30) {
+                                                            $workTime = App\Models\User::find($att->user_id)->third_day; 
+                                                        } else {
+                                                            $workTime = App\Models\User::find($att->user_id)->fourth_day; 
+                                                        }
+                                                    ?>
+                                                    {{ $workTime }}時間
                                                     <br>
                                                     <hr style=" margin-top: 0px !important; margin-bottom: 0px !important;">
-                                                    <?=gmdate('H:i', $uptime)?>勤務
+                                                    <?=sprintf('%02d:%02d', $hours, $minutes)?>勤務
                                                 </td>
                                             </tr>
                                             <?php
@@ -286,7 +342,60 @@
         </div>
     </div>
 </div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form action="{{ route("company.shift_set") }}" method="post">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel2">シフト設定</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="year" id="shift_year">
+                    <input type="hidden" name="month" id="shift_month">
+                    <input type="hidden" name="day" id="shift_day">
+                    <input type="hidden" name="user_id" id="shift_user_id">
+                    <div class="col-md-12">
+                        <div class="x_content">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-sm-4 d-flex">
+                                            <select id="sheet_id" name="sheet_id" class="form-control" required style="width:200px" onchange="sel_sheet()">
+                                                <option value="0">シフト選択</option>
+                                                @foreach($sheets as $sheet)
+                                                <option value="{{$sheet->id}}">{{$sheet->sheet_name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div id="sheet_name_1" style="width: 38px; height: 38px; background-color: #fff; align-items: center; display: flex; justify-content: center; font-size: 17px;color: #fff;"></div>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <div class="ml-2" id="sheet_info"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">適用</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
+function shift_set(year, month, day, user_id) {
+    console.log(year, month, day, user_id);
+    $("#shift_year").val(year);
+    $("#shift_month").val(month);
+    $("#shift_day").val(day);
+    $("#shift_user_id").val(user_id);
+    $('.bs-example-modal-sm').modal('show');
+}
 function set_sheet() {
     // user_id
     var list = $("input[name='table_records']:checked").map(function () {
@@ -396,6 +505,30 @@ function sel_sheet() {
             }
         }
     });
+}
+function getSubDepart(){
+    if ($("#depart_id").val() != 0) {
+        $.ajax({
+            url: "{{ route('company.staff_get_sub_depart') }}",
+            method: 'post',
+            data: {
+                depart_id: $("#depart").val()
+            },
+            success: function(data) {
+                if (data.length === 0) {
+                    $("#sub_depart").html(`<option value="0">データがありません。</option>`);
+                } else {
+                    var options = `<option value="0">子部門選択</option>`;
+                    options += data.map(function(item) {
+                        return `<option value="${item.id}">${item.name}</option>`;
+                    }).join('');
+                    $("#sub_depart").html(options);
+                }
+            }
+        });
+    } else {
+        $("#sub_depart").html(`<option value="0">子部門選択</option>`);
+    }
 }
 </script>
 

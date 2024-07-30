@@ -53,6 +53,17 @@
                         <div class="col-lg-8">
                             <a class="btn btn-danger w-100" href="javascript:void(0);" onclick="staff_delete({{ $staff->id }})">削除</a>
                         </div>
+
+                        @if ($staff->status != 1)
+                        <div class="col-lg-8">
+                            <a class="btn btn-info w-100" href="javascript:void(0);" onclick="staff_leave({{ $staff->id }})">休職処理</a>
+                        </div>
+                        @else
+                        <div class="col-lg-8">
+                            <a class="btn btn-info w-100" href="javascript:void(0);" onclick="return_leave({{ $staff->id }})">復職</a>
+                        </div>
+                        @endif
+
                         @if ($staff->status != 2)
                         <div class="col-lg-8">
                             <a class="btn btn-warning w-100" href="javascript:void(0);" onclick="retirement({{ $staff->id }})">退職処理</a>
@@ -386,42 +397,42 @@
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="hourly_wage">時給</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="hourly_wage" name="hourly_wage" class="form-control" value="{{ isset($salary->hourly_wage) ? $salary->hourly_wage : 0 }}" disabled="disabled">
+                                                    <input type="number" id="hourly_wage" name="hourly_wage" class="form-control" value="{{ isset($salary->hourly_wage) ? number_format($salary->hourly_wage) : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
                                             
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="basic_allowance">基本給</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="basic_allowance" name="basic_allowance" class="form-control" value="{{ isset($salary->basic_allowance) ? $salary->basic_allowance : 0 }}" disabled="disabled">
+                                                    <input type="number" id="basic_allowance" name="basic_allowance" class="form-control" value="{{ isset($salary->basic_allowance) ? number_format($salary->basic_allowance) : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="business_allowance">業務手当</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="business_allowance" name="business_allowance" class="form-control" value="{{ isset($salary->business_allowance) ? $salary->business_allowance : 0 }}" disabled="disabled">
+                                                    <input type="number" id="business_allowance" name="business_allowance" class="form-control" value="{{ isset($salary->business_allowance) ? number_format($salary->business_allowance) : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="position_allowance">役職手当</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="position_allowance" name="position_allowance" class="form-control" value="{{ isset($salary->position_allowance) ? $salary->position_allowance : 0 }}" disabled="disabled">
+                                                    <input type="number" id="position_allowance" name="position_allowance" class="form-control" value="{{ isset($salary->position_allowance) ? number_format($salary->position_allowance) : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="technical_allowance">技術手当</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="technical_allowance" name="technical_allowance" class="form-control" value="{{ isset($salary->technical_allowance) ? $salary->technical_allowance : 0 }}" disabled="disabled">
+                                                    <input type="number" id="technical_allowance" name="technical_allowance" class="form-control" value="{{ isset($salary->technical_allowance) ? number_format($salary->technical_allowance) : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="adjustment_allowance">出向調整金</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="adjustment_allowance" name="adjustment_allowance" class="form-control" value="{{ isset($salary->adjustment_allowance) ? $salary->adjustment_allowance : 0 }}" disabled="disabled">
+                                                    <input type="number" id="adjustment_allowance" name="adjustment_allowance" class="form-control" value="{{ isset($salary->adjustment_allowance) ? number_format($salary->adjustment_allowance) : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
                                             <div id="item_list">
@@ -441,7 +452,7 @@
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="monthly_total">月額合計</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="monthly_total" name="monthly_total" class="form-control" value="" disabled="disabled">
+                                                    <input type="text" id="monthly_total" name="monthly_total" class="form-control" value="" disabled="disabled">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -689,41 +700,60 @@
 @section('script')
     <script>
         $(document).ready(function(){
-            let hourlyWage = parseFloat($("#hourly_wage").val());
-            let basicAllowance = parseFloat($("#basic_allowance").val());
-            let businessAllowance = parseFloat($("#business_allowance").val());
-            let positionAllowance = parseFloat($("#position_allowance").val());
-            let technicalAllowance = parseFloat($("#technical_allowance").val());
-            let adjustmentAllowance = parseFloat($("#adjustment_allowance").val());
+            let hourlyWage = parseInt($("#hourly_wage").val().replace(/,/g, ''), 10);
+            let basicAllowance = parseInt($("#basic_allowance").val().replace(/,/g, ''), 10);
+            let businessAllowance = parseInt($("#business_allowance").val().replace(/,/g, ''), 10);
+            let positionAllowance = parseInt($("#position_allowance").val().replace(/,/g, ''), 10);
+            let technicalAllowance = parseInt($("#technical_allowance").val().replace(/,/g, ''), 10);
+            let adjustmentAllowance = parseInt($("#adjustment_allowance").val().replace(/,/g, ''), 10);
             let itemArray = [];
             for (let i = 0; i < $("input[name^='update_item_content_']").length; i++) {
-                itemArray.push(parseFloat($("input[name^='update_item_content_']")[i].value));
+                itemArray.push(parseInt($("input[name^='update_item_content_']")[i].value.replace(/,/g, ''), 10));
             }
-            $("#monthly_total").val(hourlyWage + basicAllowance + businessAllowance + positionAllowance + technicalAllowance + adjustmentAllowance + itemArray.reduce((a, b) => a + b, 0));
+            let monthly_total = hourlyWage + basicAllowance + businessAllowance + positionAllowance + technicalAllowance + adjustmentAllowance + itemArray.reduce((a, b) => a + b, 0)
+            $("#monthly_total").val(monthly_total.toLocaleString());
             var depart = $("#depart_id").val();
             var sub_depart = $("#sub_depart_id").val();
             $("#depart").val(depart + " / " + sub_depart);
-            // console.log("hi");
-            // calculateAge({{ $staff->birthday }})
         });
-        // function calculateAge(birthDate) {
-        //     const today = new Date();
-        //     const birthDate = new Date(birthDate);
-        //     let age = today.getFullYear() - birthDate.getFullYear();
-        //     const monthDiff = today.getMonth() - birthDate.getMonth();
-
-        //     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        //         age--;
-        //     }
-
-        //     // return age;
-        //     console.log(age);
-        // }
-
         function staff_delete(id){
             let userConfirmed = confirm("本当に削除してもよろしいですか？");
             if (userConfirmed) {
                 window.location.href = "{{ route('company.staff_delete', $staff->id) }}";
+            }
+        }
+        function staff_leave(id) {
+            let userConfirmed = confirm("設定を進めてもよろしいですか？");
+            if (userConfirmed) {
+                $.ajax({
+                    url: "{{ route('company.staff_leave') }}",
+                    method: 'post',
+                    data: {
+                        staff_id: id
+                    },
+                    success: function(data) {
+                        if(data == "ok"){
+                            window.location.href = "{{ route('company.staff_list') }}";
+                        }
+                    }
+                });
+            }
+        }
+        function return_leave(id) {
+            let userConfirmed = confirm("設定を進めてもよろしいですか？");
+            if (userConfirmed) {
+                $.ajax({
+                    url: "{{ route('company.return_leave') }}",
+                    method: 'post',
+                    data: {
+                        staff_id: id
+                    },
+                    success: function(data) {
+                        if(data == "ok"){
+                            window.location.href = "{{ route('company.staff_list') }}";
+                        }
+                    }
+                });
             }
         }
         function retirement(id){

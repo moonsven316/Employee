@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>従業員名 : {{ $staff->user_name }}</h2>
+                <h2>従業員名 : <a style="text-decoration: underline;" href="{{ route('company.staff_detail', $staff->id) }}">{{ $staff->user_name }}</a></h2>
                 <ul class="nav navbar-right panel_toolbox" style="min-width:0px">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -40,10 +40,10 @@
                                     <td class="text-start"><div class="float-left">実働日数</div></td>
                                     <td class="text-end"><div class="float-right" id="current_work_day">0日</div></td>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <td class="text-start"><div class="float-left">休日出勤日数</div></td>
                                     <td class="text-end"><div class="float-right" id="rest_day">0日</div></td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -82,6 +82,35 @@
                         </table>
                     </div>
                 </div>
+                <form class="col-md-8 col-sm-12 form-group row gap-2 text-end" action="{{ route("company.month_user_attend") }}" method="post">
+                    @csrf
+                    <input type="hidden" name="staff_id" value="{{ $staff->id }}">
+                    <select id="year" name="year" class="form-control" style="width:90px">
+                        <?php 
+                            if(empty($_REQUEST['year']))$_REQUEST['year'] = date("Y");
+        
+                            for($y = 2023; $y < 2025; $y++){
+                        ?>
+                        <option value="{{$y}}"
+                        <?php if($_REQUEST['year'] == $y){?>selected<?php }?>
+                        >{{$y}}</option>
+                        <?php }?>
+                    </select>
+        
+                    <select id="month" name="month" class="form-control" style="width:70px">
+                        <?php 
+                            if(empty($_REQUEST['month']))$_REQUEST['month'] = date("m");
+                        ?>
+                        @for($i = 1; $i < 13; $i++) 
+                        <option 
+                        <?php if($_REQUEST['month'] == $i){?>selected<?php }?>
+        
+                        value="{{$i}}"
+                        >{{$i}}</option>
+                        @endfor
+                    </select>
+                    <button class="btn btn-primary" type="submit">検索</button>
+                </form>
                 <div class="table-responsive mt-3">
                     <table id="datatable-buttons2" class="table table-striped table-bordered bulk_action" style="width:100%">
                         <thead>
@@ -89,9 +118,14 @@
                                 <th class="text-center">No</th>
                                 <th class="text-center">日付</th>
                                 <th class="text-center">出勤状態</th>
-                                <th class="text-center">出勤～退勤時間</th>
+                                <th class="text-center">シフト</th>
+                                <th class="text-center">出勤時間</th>
+                                <th class="text-center">退勤時間</th>
+                                <th class="text-center">労働時間</th>
+                                <th class="text-center">残業時間</th>
+                                <th class="text-center">深夜時間</th>
                                 <th class="text-center">休憩時間</th>
-                                <th class="text-center">稼働時間</th>
+                                <th class="text-center">備考</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,7 +133,8 @@
                                 $i = 0; 
                                 $total_working_time = 0; 
                                 $total_working_time_ = 0;
-                                $workTime = App\Models\User::find($attend->user_id)->total_work_time;
+                                $total_workTime = App\Models\User::find($user_id)->total_work_time;
+                                $workTime = 0;
                                 $total_work_day = 0;
                                 $work_day = 0;
                                 $absence_day = 0;
@@ -113,7 +148,18 @@
                                 $over_time = 0;
                                 $holiday_work_hours = 0;
                                 $week_late_night = 0;
+                                $hours = 0;
+                                $minutes = 0;
+                                $night_hours = 0;
+                                $night_minutes = 0;
+                                $over_hours = 0;
+                                $over_minutes = 0;
+                                $holiday_hours = 0;
+                                $holiday_minutes = 0;
+                                $weekday_hours = 0;
+                                $weekday_minutes = 0;
                             @endphp
+                            <?php $user = App\Models\User::find($user_id); ?>
                             @foreach ($dates as $date)
                                 <?php
                                     $month = explode ("-", explode (":", $date)[0])[1];
@@ -147,10 +193,19 @@
                                     $today = date('d');
                                     $attend_status = "";
                                     $sel_sheet = "";
-                                    $ot_ct = "";
+                                    $start_time = "";
+                                    $end_time = "";
                                     $rs_re = "";
                                     $uptime = "";
+                                    $total_time = "";
+                                    $overTime = "";
                                     $standard_time = strtotime("18:00");
+                                    $nightStandardOpenTime = strtotime("22:00");
+                                    $nightStandardCloseTime = strtotime("05:00");
+                                    $stampTime = "";
+                                    $standOpenTime = "";
+                                    $standCloseTime = "";
+                                    $shiftTime = "";
                                     if (isset($sh)) {
                                         foreach($sheets as $sheet){
                                             if($sheet->id == $sh->sh){
@@ -165,22 +220,36 @@
                                                 $rest_day++;
                                             }
                                         }
-                                        if ($standard_time > $sel_sheet->open_time) {
-                                            $night_time += strtotime($sel_sheet->close_time) - strtotime($sel_sheet->open_time);
+                                        if ($day > $today) {
+                                            $shiftTime = `<div></div>`;
+                                        } elseif(!empty($sh->ot) && !empty($sh->ct)) {
+                                            $standOpenTime_ = explode(":", $sh->ot);
+                                            $standOpenTime = $standOpenTime_[0].":".$standOpenTime_[1];
+                                            $standCloseTime_ = explode(":", $sh->ct);
+                                            $standCloseTime = $standCloseTime_[0].":".$standCloseTime_[1];
+                                            $shiftTime = $standOpenTime." ~ ".$standCloseTime;
+                                        } else {
+                                            $shiftTime = "00:00 ~ 00:00";
                                         }
                                     }
                                     if($attend["s".$day-0] == "" && $attend["a".$day-0] == ""){
                                         $attend_status = `<div></div>`;
                                     } elseif ($attend["s".$day-0] !="" && $attend["a".$day-0] == "") {
                                         if ($sh->ot != "" && $sh->ct != "") {
-                                            if ($day > $today) {
+                                            if ($user->status == 1) {
+                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color: rgb(225, 255, 0);'>休職</div>";
+                                            } elseif ($day > $today) {
                                                 $attend_status = `<div></div>`;
                                             } else {
                                                 $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:red;' onclick='get_att_data($attend->id, $day)'>欠勤</div>";
                                                 $absence_day++;
                                             }
                                         } else {
-                                            $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:".$sel_sheet->sheet_color."'>".$sel_sheet->sheet_name_1."</div>";
+                                            if ($user->status == 1) {
+                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color: rgb(225, 255, 0);'>休職</div>";
+                                            } else {
+                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:".$sel_sheet->sheet_color."'>".$sel_sheet->sheet_name_1."</div>";
+                                            }
                                         }
                                     }
                                     if (isset($ah)) {
@@ -188,35 +257,87 @@
                                         $sh_ct = strtotime($sh->ct);
                                         $ah_ot = strtotime($ah->ot);
                                         $ah_ct = strtotime($ah->ct);
+
+                                        // $ah_openTime = new DateTime($ah->ot);
+                                        // $ah_closeTime = new DateTime($ah->ct);
+                                        // $ah_time = $ah_openTime->diff($ah_closeTime);
+                                        // $ah_rs_time = new DateTime($ah->rs);
+                                        // $ah_re_time = new DateTime($ah->re);
+                                        // $rs_time = $ah_rs_time->diff($ah_re_time);
+                                        // $workTime += $ah_time->i * 60 + $ah_time->h * 3600 - $rs_time->i * 60 - $rs_time->h * 3600;
+
                                         if ($ah->rd == 0 && isset($ah_ot) && isset($ah_ct)) {
-                                            $holiday_work_hours += $ah_ct - $ah_ot;
-                                        }
-                                        if ($sh_ct > $ah_ct) {
-                                            $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:pink;' onclick='get_att_data($attend->id, $day)'>早退</div>";
-                                            $leave_day++;
-                                        } else {
-                                            if ($sh_ot < $ah_ot) {
-                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:#ffc107;' onclick='get_att_data($attend->id, $day)'>遅刻</div>";
-                                                $late_day++;
-                                            } elseif ($sh_ot > $ah_ot) {
-                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:#007bff;' onclick='get_att_data($attend->id, $day)'>出勤</div>";
-                                                $work_day++;
-                                            } elseif ($sh_ct > $ah_ot) {
-                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:red;' onclick='get_att_data($attend->id, $day)'>欠勤</div>";
+                                            $holiday_work_hours_ = $ah_ct - $ah_ot;
+                                            $holiday_rest_hours = strtotime($ah->re) - strtotime($ah->rs);
+
+                                            list($holiday_start_hours, $holiday_start_minutes) = explode(':', gmdate("H:i", $holiday_work_hours_));
+                                            list($holiday_end_hours, $holiday_end_minutes) = explode(':', gmdate("H:i", $holiday_rest_hours));
+
+                                            $holiday_total_start_minutes = (int)$holiday_start_hours * 60 + (int)$holiday_start_minutes;
+                                            $holiday_total_end_minutes = (int)$holiday_end_hours * 60 + (int)$holiday_end_minutes;
+
+                                            $holiday_total_work_time_ = $holiday_total_start_minutes - $holiday_total_end_minutes;
+
+                                            if ($holiday_total_work_time_ > 0) {
+                                                $holiday_hours += floor($holiday_total_work_time_ / 60);
+                                                $holiday_minutes += $holiday_total_work_time_ % 60;
                                             }
                                         }
-                                        if (isset($ah->ot) && isset($ah->ct)) {
-                                            $st_time = explode(":", $ah->ot);
-                                            $en_time = explode(":", $ah->ct);
-                                            $ot_ct = $st_time[0].":".$st_time[1].'~'.$en_time[0].":".$en_time[1];
+                                        if ($sh_ct > $ah_ct) {
+                                            if ($user->status == 1) {
+                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color: rgb(225, 255, 0);'>休職</div>";
+                                            } else {
+                                                $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:pink;' onclick='get_att_data($attend->id, $day)'>早退</div>";
+                                                $leave_day++;
+                                            }
+                                        } else {
+                                            if ($sh_ot < $ah_ot) {
+                                                if ($user->status == 1) {
+                                                    $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color: rgb(225, 255, 0);'>休職</div>";
+                                                } else {
+                                                    $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:#ffc107;' onclick='get_att_data($attend->id, $day)'>遅刻</div>";
+                                                    $late_day++;
+                                                }
+                                            } elseif ($sh_ot >= $ah_ot) {
+                                                if ($user->status == 1) {
+                                                    $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color: rgb(225, 255, 0);'>休職</div>";
+                                                } else {
+                                                    $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:#007bff;' onclick='get_att_data($attend->id, $day)'>出勤</div>";
+                                                    $work_day++;
+                                                }
+                                            } elseif ($sh_ct < $ah_ot) {
+                                                if ($user->status == 1) {
+                                                    $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color: rgb(225, 255, 0);'>休職</div>";
+                                                } else {
+                                                    $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color:red;' onclick='get_att_data($attend->id, $day)'>欠勤</div>";
+                                                }
+                                            }
+                                        }
+                                        if ($user->status == 1) {
+                                            $shiftTime = "00:00";
+                                            $start_time = "00:00";
+                                            $end_time = "00:00";
+                                            $total_time = "00:00";
+                                            $overTime = "00:00";
+                                            $stampTime = "00:00";
+                                            $rs_re = "00:00";
+                                        } elseif (isset($ah->ot) && isset($ah->ct)) {
+                                            $start_time = $ah->ot;
+                                            $end_time = $ah->ct;
                                             $downtime_ = strtotime($sh->ct) - strtotime($sh->ot);
-                                            $uptime_ = strtotime($ah->ct) - strtotime($ah->ot);
-                                            $uptime = gmdate('H:i', $uptime_);
+                                            $uptime_ = strtotime($end_time) - strtotime($start_time);
                                             if ($ah->rd == 1) {
-                                                $week_working_hours_ += $uptime_;
-                                                $week_working_hours = gmdate('H:i', $week_working_hours_);
+                                                $week_working_hours_ += $uptime_ - strtotime($ah->re) - strtotime($ah->rs);
                                                 if ($uptime_ > $downtime_) {
-                                                    $over_time += $uptime_ - $downtime_;
+                                                    list($over_start_hours, $over_start_minutes) = explode(':', gmdate("H:i", $uptime_));
+                                                    list($over_end_hours, $over_end_minutes) = explode(':', gmdate("H:i", $downtime_));
+                                                    $over_total_start_minutes = (int)$over_start_hours * 60 + (int)$over_start_minutes;
+                                                    $over_total_end_minutes = (int)$over_end_hours * 60 + (int)$over_end_minutes;
+                                                    $over_total_work_time_ = $over_total_start_minutes - $over_total_end_minutes;
+                                                    if ($over_total_work_time_ > 0) {
+                                                        $over_hours += floor($over_total_work_time_ / 60);
+                                                        $over_minutes += $over_total_work_time_ % 60;
+                                                    }
                                                 }
                                                 if ($ah_ot >= $standard_time) {
                                                     $week_late_night += $ah_ct - $ah_ot;
@@ -224,28 +345,96 @@
                                             }
                                             $total_working_time_ += $uptime_;
                                             $total_working_time = gmdate('H:i', $total_working_time_);
+                                            if (isset($ah->rs) && isset($ah->re)) {
+                                                $rs_re_ = strtotime($ah->re) - strtotime($ah->rs);
+                                                $rs_re = gmdate("H:i", $rs_re_);
+                                            } else {
+                                                $rs_re = "";
+                                            }
+                                            $_total_working_time = $uptime_ - $rs_re_;
+                                            $total_time = gmdate("H:i", $_total_working_time);
+
+                                            list($start_hours, $start_minutes) = explode(':', gmdate("H:i", $uptime_));
+                                            list($end_hours, $end_minutes) = explode(':', gmdate("H:i", $rs_re_));
+                                            $total_start_minutes = (int)$start_hours * 60 + (int)$start_minutes;
+                                            $total_end_minutes = (int)$end_hours * 60 + (int)$end_minutes;
+                                            $total_work_time_ = $total_start_minutes - $total_end_minutes;
+                                            if ($total_work_time_ > 0) {
+                                                $hours += floor($total_work_time_ / 60);
+                                                $minutes += $total_work_time_ % 60;
+                                            }
+
+                                            if ($yo != "(土)" && $yo != "(日)") {
+                                                list($weekday_start_hours, $weekday_start_minutes) = explode(':', gmdate("H:i", $uptime_));
+                                                list($weekday_end_hours, $weekday_end_minutes) = explode(':', gmdate("H:i", $rs_re_));
+                                                $weekday_total_start_minutes = (int)$weekday_start_hours * 60 + (int)$weekday_start_minutes;
+                                                $weekday_total_end_minutes = (int)$weekday_end_hours * 60 + (int)$weekday_end_minutes;
+                                                $weekday_total_work_time_ = $weekday_total_start_minutes - $weekday_total_end_minutes;
+                                                if ($weekday_total_work_time_ > 0) {
+                                                    $weekday_hours += floor($weekday_total_work_time_ / 60);
+                                                    $weekday_minutes += $weekday_total_work_time_ % 60;
+                                                }
+                                            }
+
+                                            $overTime_ = $uptime_ - $downtime_;
+                                            $overTime = gmdate("H:i", $overTime_);
+                                            if ($ah_ot >= $nightStandardOpenTime) {
+                                                $stampTime_ = $ah_ct - $ah_ot;
+                                                $stampTime = gmdate("H:i", $stampTime_);
+                                                $night_rs_time = strtotime($ah->re) - strtotime($ah->rs);
+                                                if ($yo != "(土)" && $yo != "(日)") {
+                                                    list($night_start_hours, $night_start_minutes) = explode(':', $stampTime);
+                                                    list($night_end_hours, $night_end_minutes) = explode(':', gmdate("H:i", $night_rs_time));
+                                                    $night_start_minutes = (int)$night_start_hours * 60 + (int)$night_start_minutes;
+                                                    $night_end_minutes = (int)$night_end_hours * 60 + (int)$night_end_minutes;
+                                                    $night_work_time_ = $night_start_minutes - $night_end_minutes;
+                                                    if ($night_work_time_ > 0) {
+                                                        $night_hours += floor($night_work_time_ / 60);
+                                                        $night_minutes += $night_work_time_ % 60;
+                                                    }
+                                                }
+                                            } else {
+                                                $stampTime = "00:00";
+                                            }
                                         } else {
                                             $ot_ct = "";
                                         }
-                                        if (isset($ah->rs) && isset($ah->re)) {
-                                            $rs_time = explode(":", $ah->rs);
-                                            $re_time = explode(":", $ah->re);
-                                            $rs_re = $rs_time[0].":".$rs_time[1].'~'.$re_time[0].":".$re_time[1];
-                                        } else {
-                                            $rs_re = "";
-                                        }
                                     }
+                                    $note_ = json_decode($attend["notes"]);
+                                    $key = 'a' . ($i + 1);
+                                    $note = $note_->$key; 
                                     $i++;
                                 ?>
                                 <tr>
                                     <td class="text-center"><?=$i?></td>
                                     <td class="text-center" style="@if(strpos($d, "土") == true) color: red; @elseif(strpos($d, "日") == true) color: red; @endif"><?=$d?></td>
                                     <td class="text-center" style="padding: 0;"><?=$attend_status?></td>
-                                    <td class="text-center"><?=$ot_ct?></td>
+                                    <td class="text-center"><?=$shiftTime?></td>
+                                    <td class="text-center"><?=$start_time?></td>
+                                    <td class="text-center"><?=$end_time?></td>
+                                    <td class="text-center"><?=$total_time?></td>
+                                    <td class="text-center"><?=$overTime?></td>
+                                    <td class="text-center"><?=$stampTime?></td>
                                     <td class="text-center"><?=$rs_re?></td>
-                                    <td class="text-center"><?=$uptime?></td>
+                                    <td class="text-center"><?=$note?></td>
                                 </tr>
                             @endforeach
+                            @php
+                                $hours += floor($minutes / 60);
+                                $minutes = $minutes % 60;
+
+                                $night_hours += floor($night_minutes / 60);
+                                $night_minutes = $night_minutes % 60;
+
+                                $over_hours += floor($over_minutes / 60);
+                                $over_minutes = $over_minutes % 60;
+
+                                $holiday_hours += floor($holiday_minutes / 60);
+                                $holiday_minutes = $holiday_minutes % 60;
+
+                                $weekday_hours += floor($weekday_minutes / 60);
+                                $weekday_minutes = $weekday_minutes % 60;
+                            @endphp
                         </tbody>
                     </table>
                 </div>
@@ -265,6 +454,15 @@
                 <div class="modal-body">
                     <input type="hidden" name="att_id" id="att_id">
                     <input type="hidden" name="att_day" id="att_day">
+                    <div class="col-md-12 col-sm-12 ">
+                        <div class="form-group row">
+                            <label for="fullname">シフト</label>
+                            <div class="d-flex">
+                                <input type="time" id="shift_open_time" class="form-control" name="shift_open_time" required="">
+                                <input type="time" id="shift_close_time" class="form-control" name="shift_close_time" required="">
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12 col-sm-12 ">
                         <div class="form-group row">
                             <label class="col-form-label col-md-4 col-sm-4 label-align" for="open_time">
@@ -305,6 +503,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-12 col-sm-12 ">
+                        <div class="form-group row">
+                            <label class="col-form-label col-md-4 col-sm-4 label-align" for="note">
+                                備考
+                            </label>
+                            <div class="col-md-8 col-sm-8 ">
+                                <input type="text" id="note" name="note" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
@@ -319,20 +527,21 @@
     <script>
         $(document).ready(function() {
             $(".dataTables_length").css('margin-bottom', '-45px');
-            $("#total_time").html("{{ $workTime }}");
-            $("#work_time").html("{{ $total_working_time }}");
+            // $("#total_time").html("{{ floor($workTime / 3600) . ':' . floor(($workTime % 3600) / 60) }}");
+            $("#total_time").html("{{ sprintf('%02d:%02d', $hours, $minutes) }}");
+            $("#work_time").html("{{ sprintf('%02d:%02d', $hours, $minutes) }}");
             $("#total_work_day").html("{{ $total_work_day }}日")
-            $("#work_day").html("{{ $work_day }}日");
+            // $("#total_work_day").html("{{ $total_workTime }}時間")
+            $("#work_day").html("{{ $work_day + $late_day + $leave_day  }}日");
             $("#absence_day").html("{{ $absence_day }}日");
             $("#late_day").html("{{ $late_day }}日");
             $("#leave_day").html("{{ $leave_day }}日");
             $("#current_work_day").html("{{ $work_day + $late_day + $leave_day }}日");
-            $("#rest_day").html("{{ $rest_day }}日");
-            $("#night_time").html("{{ gmdate('H:i', $night_time) }}");
-            $("#week_working_hours").html("{{ $week_working_hours }}");
-            $("#over_time").html("{{ gmdate('H:i', $over_time) }}");
-            $("#holiday_work_hours").html("{{ gmdate('H:i', $holiday_work_hours) }}");
-            $("#week_late_night").html("{{ gmdate('H:i', $week_late_night) }}");
+            $("#night_time").html("{{ sprintf('%02d:%02d', $night_hours, $night_minutes) }}");
+            $("#week_working_hours").html("{{ sprintf('%02d:%02d', $weekday_hours, $weekday_minutes) }}");
+            $("#over_time").html("{{ sprintf('%02d:%02d', $over_hours, $over_minutes) }}");
+            $("#holiday_work_hours").html("{{ sprintf('%02d:%02d', $holiday_hours, $holiday_minutes) }}");
+            $("#week_late_night").html("{{ sprintf('%02d:%02d', $night_hours, $night_minutes) }}");
         });
         function get_att_data(id, day) {
             $("#att_id").val(id);
@@ -347,12 +556,36 @@
                     'data': d
                 },
                 success: function(data) {
-                    if (data.length != 0) {
-                        $("#open_time").val(data["ot"]);
-                        $("#close_time").val(data["ct"]);
-                        $("#rest_start_time").val(data["rs"]);
-                        $("#rest_end_time").val(data["re"]);
+                    if (data && Object.keys(data).length !== 0) {
+                        if (data.standTime) {
+                            const standTime = JSON.parse(data.standTime);
+                            $("#shift_open_time").val(standTime.ot);
+                            $("#shift_close_time").val(standTime.ct);
+                        } else {
+                            $("#shift_open_time").val("");
+                            $("#shift_close_time").val("");
+                        }
+                        if (data.stampTime) {
+                            const stampTime = JSON.parse(data.stampTime);
+                            $("#open_time").val(stampTime.ot);
+                            $("#close_time").val(stampTime.ct);
+                            $("#rest_start_time").val(stampTime.rs);
+                            $("#rest_end_time").val(stampTime.re);
+                        } else {
+                            $("#open_time").val("");
+                            $("#close_time").val("");
+                            $("#rest_start_time").val("");
+                            $("#rest_end_time").val("");
+                        }
+                        if (data.note) {
+                            $("#note").val(data.note);
+                        } else {
+                            $("#note").val("");
+                        }
                     } else {
+                        // Handle the case where data is empty
+                        $("#shift_open_time").val("");
+                        $("#shift_close_time").val("");
                         $("#open_time").val("");
                         $("#close_time").val("");
                         $("#rest_start_time").val("");

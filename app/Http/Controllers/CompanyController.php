@@ -54,47 +54,53 @@ class CompanyController extends Controller
 
 		$user = Auth::user();
 		$company = Company::where('user_id', $user->id)->first();
-        $staffs = User::where('company_id', $company->id)
-							->where('role', 2)
-							->get();
-		$day = date('d');
-		$numberOfDays = date('t');
-		$leave_data = [];
-		foreach($staffs as $staff) {
-			$attends = Attends::where('user_id', $staff->id)->where('year', date('Y'))->where('month', date('m'))->first();
-			for ($i=1; $i < $numberOfDays; $i++) { 
-				if ($day == $i) {
-					if (isset($attends["s".$day])) {
-						$a_data = json_decode($attends["s".$day]);
-						if(isset($a_data)){
-							$sheet = Sheets::find($a_data->sh);
-							if (isset($sheet)) {
-								if($sheet->rest_day == 0){
-									array_push($leave_data, $attends->user_id);
-									$leaveStaff = User::find($attends->user_id);
-									if($leaveStaff->status != "2") {
-										$leaveStaff->status = "1";
-										$leaveStaff->save();
-									}
-								} else {
-									$leaveStaff = User::find($attends->user_id);
-									if($leaveStaff->status != "2") {
-										$leaveStaff->status = "0";
-										$leaveStaff->save();
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		$staff_leave = User::whereIn('id', $leave_data)
-							->where('company_id', $company->id)
+        // $staffs = User::where('company_id', $company->id)
+		// 					->where('role', 2)
+		// 					->get();
+		// $day = date('d');
+		// $numberOfDays = date('t');
+		// $leave_data = [];
+		// foreach($staffs as $staff) {
+		// 	$attends = Attends::where('user_id', $staff->id)->where('year', date('Y'))->where('month', date('m'))->first();
+		// 	for ($i=1; $i < $numberOfDays; $i++) { 
+		// 		if ($day == $i) {
+		// 			if (isset($attends["s".$day])) {
+		// 				$a_data = json_decode($attends["s".$day]);
+		// 				if(isset($a_data)){
+		// 					$sheet = Sheets::find($a_data->sh);
+		// 					if (isset($sheet)) {
+		// 						if($sheet->rest_day == 0){
+		// 							array_push($leave_data, $attends->user_id);
+		// 							$leaveStaff = User::find($attends->user_id);
+		// 							if($leaveStaff->status != "2") {
+		// 								$leaveStaff->status = "1";
+		// 								$leaveStaff->save();
+		// 							}
+		// 						} else {
+		// 							$leaveStaff = User::find($attends->user_id);
+		// 							if($leaveStaff->status != "2") {
+		// 								$leaveStaff->status = "0";
+		// 								$leaveStaff->save();
+		// 							}
+		// 						}
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+		// $staff_leave = User::whereIn('id', $leave_data)
+		// 					->where('company_id', $company->id)
+		// 					->where('role', 2)
+		// 					->where('status', '1')
+		// 					->where('status', '<>' ,'0')
+		// 					->where('status', '<>' ,'2')
+		// 					->get();
+		$staff_leave = User::where('company_id', $company->id)
 							->where('role', 2)
 							->where('status', '1')
 							->where('status', '<>' ,'0')
-							->where('status', '<>' ,'3')
+							->where('status', '<>' ,'2')
 							->get();
 
 		$staff_working = User::where('company_id', $company->id)
@@ -123,6 +129,21 @@ class CompanyController extends Controller
 			return redirect()->route('company.staff_add');
 		}
 
+	}
+
+	public function staff_leave(Request $request) {
+		$user = User::find($request->staff_id);
+		$user->status = "1";
+		if($user->save()){
+			return "ok";
+		}
+	}
+	public function return_leave(Request $request) {
+		$user = User::find($request->staff_id);
+		$user->status = "0";
+		if($user->save()){
+			return "ok";
+		}
 	}
 
 	public function staff_history(Request $request) {
@@ -228,7 +249,10 @@ class CompanyController extends Controller
 		$staff->employ_num = $request->employ_num;
 		$staff->metaitem = $request->meta;
 		$staff->avatar = $request->avatar;
-		$staff->total_work_time = $request->total_work_time;
+		$staff->first_day = $request["first_day"];
+		$staff->second_day = $request["second_day"];
+		$staff->third_day = $request["third_day"];
+		$staff->fourth_day = $request["fourth_day"];
 		$staff->salary_date = $request->salary_date;
 		$staff->idm = $request->idm;
 		$staff->job_id = $request->job_id;
@@ -321,16 +345,15 @@ class CompanyController extends Controller
 		$user = Auth::user();
 		$company = Company::where('user_id', $user->id)->first();
 
-		$Sheets = Sheets::where('company_id', $company->id)->get();	
+		$current_sheets = Sheets::where('company_id', $company->id)->where('deleted_flag', "0")->get();	
+		$deleted_sheets = Sheets::where('company_id', $company->id)->where('deleted_flag', "1")->get();	
 
 		$company_avart = "";
 		$mat = Material::where('user_id', $user->id)->get();	
 		if(count($mat) > 0){
 			$company_avart = $mat[0]["dt1"];
 		}
-
-
-		return view('company.sheet_list',  ['user' => $user, 'sheets' => $Sheets,  'company' => $company, 'company_avart'=>$company_avart]);
+		return view('company.sheet_list',  ['user' => $user, 'current_shift' => $current_sheets, 'deleted_shift' => $deleted_sheets, 'company' => $company, 'company_avart'=>$company_avart]);
 
 	}
 
@@ -829,9 +852,42 @@ class CompanyController extends Controller
 		$departments = Department::where('company_id', $company->id)->get();
 
 		$staffs = User::where('company_id', $company->id)
-						->where('status', '<>', "2")
+						->where('status', "0")
 						->where('role', 2)
 						->get();
+		$note = [
+			"a1" => "",
+			"a2" => "",
+			"a3" => "",
+			"a4" => "",
+			"a5" => "",
+			"a6" => "",
+			"a7" => "",
+			"a8" => "",
+			"a9" => "",
+			"a10" => "",
+			"a11" => "",
+			"a12" => "",
+			"a13" => "",
+			"a14" => "",
+			"a15" => "",
+			"a16" => "",
+			"a17" => "",
+			"a18" => "",
+			"a19" => "",
+			"a20" => "",
+			"a21" => "",
+			"a22" => "",
+			"a23" => "",
+			"a24" => "",
+			"a25" => "",
+			"a26" => "",
+			"a27" => "",
+			"a28" => "",
+			"a29" => "",
+			"a30" => "",
+			"a31" => ""
+		];
 		$attends = [];
 		foreach($staffs as $staff){
 			$attend = Attends::where('user_id', $staff->id)->where("year", date("Y"))->where("month", date('m'))->first();
@@ -909,6 +965,7 @@ class CompanyController extends Controller
 				$attend->a31 = '';
 				$attend->year = date('Y');
 				$attend->month = date('m');
+				$attend->notes = json_encode($note);
 				$attend->save();
 			}
 			$attends[] = $attend;
@@ -937,6 +994,39 @@ class CompanyController extends Controller
 						->where('status', '<>', "2")
 						->where('role', 2)
 						->get();
+		$note = [
+			"a1" => "",
+			"a2" => "",
+			"a3" => "",
+			"a4" => "",
+			"a5" => "",
+			"a6" => "",
+			"a7" => "",
+			"a8" => "",
+			"a9" => "",
+			"a10" => "",
+			"a11" => "",
+			"a12" => "",
+			"a13" => "",
+			"a14" => "",
+			"a15" => "",
+			"a16" => "",
+			"a17" => "",
+			"a18" => "",
+			"a19" => "",
+			"a20" => "",
+			"a21" => "",
+			"a22" => "",
+			"a23" => "",
+			"a24" => "",
+			"a25" => "",
+			"a26" => "",
+			"a27" => "",
+			"a28" => "",
+			"a29" => "",
+			"a30" => "",
+			"a31" => ""
+		];
 		$attends = [];
 		foreach($staffs as $staff){
 			$attend = Attends::where('user_id', $staff->id)->where("year", date("Y"))->where("month", date('m'))->first();
@@ -1014,6 +1104,7 @@ class CompanyController extends Controller
 				$attend->a31 = '';
 				$attend->year = date('Y');
 				$attend->month = date('m');
+				$attend->notes = json_encode($note);
 				$attend->save();
 			}
 			$attends[] = $attend;
@@ -1136,11 +1227,118 @@ class CompanyController extends Controller
 		return view('company.day_attend_list',  ['user' => $user, 'sheets' => $sheets, 'departments'=>$departments,  'company' => $company, 'attends' => $attends, 'dates' => $dates, 'numberOfDays' => $numberOfDays, 'today' => $day, 'day' => $request->searchDate]);
 	}
 	public function user_attend(Request $request) {
+		$note = [
+			"a1" => "",
+			"a2" => "",
+			"a3" => "",
+			"a4" => "",
+			"a5" => "",
+			"a6" => "",
+			"a7" => "",
+			"a8" => "",
+			"a9" => "",
+			"a10" => "",
+			"a11" => "",
+			"a12" => "",
+			"a13" => "",
+			"a14" => "",
+			"a15" => "",
+			"a16" => "",
+			"a17" => "",
+			"a18" => "",
+			"a19" => "",
+			"a20" => "",
+			"a21" => "",
+			"a22" => "",
+			"a23" => "",
+			"a24" => "",
+			"a25" => "",
+			"a26" => "",
+			"a27" => "",
+			"a28" => "",
+			"a29" => "",
+			"a30" => "",
+			"a31" => ""
+		];
+		$user_id = $request->id;
 		$staff = User::find($request->id);
 		$company = Company::where('user_id', Auth::user()->id)->first();
 		$departments = Department::where('company_id', $company->id)->get();
 		$sheets = Sheets::where('company_id', $company->id)->get();
 		$attend = Attends::where('user_id', $request->id)->where("year", date("Y"))->where("month", date('m'))->first();
+		if(!isset($attend)) {
+			$attend = new Attends;
+			$attend->user_id = $user_id;
+			$attend->company_id = $company->id;
+			$attend->depart_id = $staff->depart_id;
+			$attend->user_name = $staff->user_name;
+			$attend->s1 = '';
+			$attend->s2 = '';
+			$attend->s3 = '';
+			$attend->s4 = '';
+			$attend->s5 = '';
+			$attend->s6 = '';
+			$attend->s7 = '';
+			$attend->s8 = '';
+			$attend->s9 = '';
+			$attend->s10 = '';
+			$attend->s11 = '';
+			$attend->s12 = '';
+			$attend->s13 = '';
+			$attend->s14 = '';
+			$attend->s15 = '';
+			$attend->s16 = '';
+			$attend->s17 = '';
+			$attend->s18 = '';
+			$attend->s19 = '';
+			$attend->s20 = '';
+			$attend->s21 = '';
+			$attend->s22 = '';
+			$attend->s23 = '';
+			$attend->s24 = '';
+			$attend->s25 = '';
+			$attend->s26 = '';
+			$attend->s27 = '';
+			$attend->s28 = '';
+			$attend->s29 = '';
+			$attend->s30 = '';
+			$attend->s31 = '';
+			$attend->a1 = '';
+			$attend->a2 = '';
+			$attend->a3 = '';
+			$attend->a4 = '';
+			$attend->a5 = '';
+			$attend->a6 = '';
+			$attend->a7 = '';
+			$attend->a8 = '';
+			$attend->a9 = '';
+			$attend->a10 = '';
+			$attend->a11 = '';
+			$attend->a12 = '';
+			$attend->a13 = '';
+			$attend->a14 = '';
+			$attend->a15 = '';
+			$attend->a16 = '';
+			$attend->a17 = '';
+			$attend->a18 = '';
+			$attend->a19 = '';
+			$attend->a20 = '';
+			$attend->a21 = '';
+			$attend->a22 = '';
+			$attend->a23 = '';
+			$attend->a24 = '';
+			$attend->a25 = '';
+			$attend->a26 = '';
+			$attend->a27 = '';
+			$attend->a28 = '';
+			$attend->a29 = '';
+			$attend->a30 = '';
+			$attend->a31 = '';
+			$attend->year = date('Y');
+			$attend->month = date('m');
+			$attend->notes = json_encode($note);
+			$attend->save();
+		}
 		$today_data = date("Y-m");
 		$numberOfDays = date('t');
 		$start_date = date('Y-m-01');
@@ -1151,22 +1349,125 @@ class CompanyController extends Controller
 			$dates[] = $start_date . ":" . $day_of_week;
 			$start_date = date('Y-m-d', strtotime($start_date . ' + 1 day'));
 		}
-		return view('company.user_attend', compact('staff', 'company', 'departments', 'sheets', 'dates', 'attend', 'numberOfDays', 'today_data'));
+		return view('company.user_attend', compact('staff', 'company', 'departments', 'sheets', 'dates', 'attend', 'numberOfDays', 'today_data', 'user_id'));
 	}
-	public function day_user_attend(Request $request) {
-
-		$user_id = $request->id;
+	public function month_user_attend(Request $request) {
+		$note = [
+			"a1" => "",
+			"a2" => "",
+			"a3" => "",
+			"a4" => "",
+			"a5" => "",
+			"a6" => "",
+			"a7" => "",
+			"a8" => "",
+			"a9" => "",
+			"a10" => "",
+			"a11" => "",
+			"a12" => "",
+			"a13" => "",
+			"a14" => "",
+			"a15" => "",
+			"a16" => "",
+			"a17" => "",
+			"a18" => "",
+			"a19" => "",
+			"a20" => "",
+			"a21" => "",
+			"a22" => "",
+			"a23" => "",
+			"a24" => "",
+			"a25" => "",
+			"a26" => "",
+			"a27" => "",
+			"a28" => "",
+			"a29" => "",
+			"a30" => "",
+			"a31" => ""
+		];
+		$user_id = $request->staff_id;
 		$date = $request->day;
-		$year = explode("-", $date)[0];
-		$month = explode("-", $date)[1];
-		$day = explode("-", $date)[2];
+		$year = $request->year;
+		$month = $request->month;
 		$today_data = $year."-".$month;
-		$staff = User::find($request->id);
+		$staff = User::find($user_id);
 		$company = Company::where('user_id', Auth::user()->id)->first();
 		$departments = Department::where('company_id', $company->id)->get();
 		$sheets = Sheets::where('company_id', $company->id)->get();
-		$attend = Attends::where('user_id', $request->id)->where("year", $year)->where("month", $month)->first();
-
+		$attend = Attends::where('user_id', $user_id)->where("year", $year)->where("month", $month)->first();
+		if(!isset($attend)) {
+			$attend = new Attends;
+			$attend->user_id = $staff->id;
+			$attend->company_id = $company->id;
+			$attend->depart_id = $staff->depart_id;
+			$attend->user_name = $staff->user_name;
+			$attend->s1 = '';
+			$attend->s2 = '';
+			$attend->s3 = '';
+			$attend->s4 = '';
+			$attend->s5 = '';
+			$attend->s6 = '';
+			$attend->s7 = '';
+			$attend->s8 = '';
+			$attend->s9 = '';
+			$attend->s10 = '';
+			$attend->s11 = '';
+			$attend->s12 = '';
+			$attend->s13 = '';
+			$attend->s14 = '';
+			$attend->s15 = '';
+			$attend->s16 = '';
+			$attend->s17 = '';
+			$attend->s18 = '';
+			$attend->s19 = '';
+			$attend->s20 = '';
+			$attend->s21 = '';
+			$attend->s22 = '';
+			$attend->s23 = '';
+			$attend->s24 = '';
+			$attend->s25 = '';
+			$attend->s26 = '';
+			$attend->s27 = '';
+			$attend->s28 = '';
+			$attend->s29 = '';
+			$attend->s30 = '';
+			$attend->s31 = '';
+			$attend->a1 = '';
+			$attend->a2 = '';
+			$attend->a3 = '';
+			$attend->a4 = '';
+			$attend->a5 = '';
+			$attend->a6 = '';
+			$attend->a7 = '';
+			$attend->a8 = '';
+			$attend->a9 = '';
+			$attend->a10 = '';
+			$attend->a11 = '';
+			$attend->a12 = '';
+			$attend->a13 = '';
+			$attend->a14 = '';
+			$attend->a15 = '';
+			$attend->a16 = '';
+			$attend->a17 = '';
+			$attend->a18 = '';
+			$attend->a19 = '';
+			$attend->a20 = '';
+			$attend->a21 = '';
+			$attend->a22 = '';
+			$attend->a23 = '';
+			$attend->a24 = '';
+			$attend->a25 = '';
+			$attend->a26 = '';
+			$attend->a27 = '';
+			$attend->a28 = '';
+			$attend->a29 = '';
+			$attend->a30 = '';
+			$attend->a31 = '';
+			$attend->year = $year;
+			$attend->month = $month;
+			$attend->notes = json_encode($note);
+			$attend->save();
+		}
 		$numberOfDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 		$start_date = date("Y-m-01", strtotime("$year-$month-01"));
 		$end_date = date("Y-m-t", strtotime("$year-$month-01"));
@@ -1177,7 +1478,7 @@ class CompanyController extends Controller
 			$dates[] = $start_date . ":" . $day_of_week;
 			$start_date = date('Y-m-d', strtotime($start_date . ' + 1 day'));
 		}
-		return view('company.user_attend', compact('staff', 'company', 'departments', 'sheets', 'dates', 'attend', 'numberOfDays', 'today_data'));
+		return view('company.user_attend', compact('staff', 'company', 'departments', 'sheets', 'dates', 'attend', 'numberOfDays', 'today_data', 'user_id'));
 
 	}
 	// ```````````````````````````````````````end day
@@ -1186,11 +1487,11 @@ class CompanyController extends Controller
 
 		$user = Auth::user();
 		$company = Company::where('user_id', $user->id)->first();
-		$sheets = Sheets::where('company_id', $company->id)->get();
+		$sheets = Sheets::where('company_id', $company->id)->where("deleted_flag", "0")->get();
 		$departments = Department::where('company_id', $company->id)->get();
 
 		$staffs = User::where('company_id', $company->id)
-						->where('status', '<>', "2")
+						->where('status', "0")
 						->where('role', 2)
 						->get();
 		$attends = [];
@@ -1291,13 +1592,60 @@ class CompanyController extends Controller
 		$month = $request->month;
 		$user = Auth::user();
 		$company = Company::where('user_id', $user->id)->first();
-		$sheets = Sheets::where('company_id', $company->id)->get();
+		$sheets = Sheets::where('company_id', $company->id)->where("deleted_flag", "0")->get();
 		$departments = Department::where('company_id', $company->id)->get();
-
-		$staffs = User::where('company_id', $company->id)
-						->where('status', '<>', "2")
+		if ($request->depart == 0) {
+			$staffs = User::where('company_id', $company->id)
+							->where('status', "0")
+							->where('role', 2)
+							->get();
+		} elseif ($request->sub_depart == 0) {
+			$staffs = User::where('company_id', $company->id)
+						->where('depart_id', $request->depart)
+						->where('status', "0")
 						->where('role', 2)
 						->get();
+		} else {
+			$staffs = User::where('company_id', $company->id)
+							->where('depart_id', $request->depart)
+							->where('sub_depart_id', $request->sub_depart)
+							->where('status', "0")
+							->where('role', 2)
+							->get();
+		}
+		$note = [
+			"a1" => "",
+			"a2" => "",
+			"a3" => "",
+			"a4" => "",
+			"a5" => "",
+			"a6" => "",
+			"a7" => "",
+			"a8" => "",
+			"a9" => "",
+			"a10" => "",
+			"a11" => "",
+			"a12" => "",
+			"a13" => "",
+			"a14" => "",
+			"a15" => "",
+			"a16" => "",
+			"a17" => "",
+			"a18" => "",
+			"a19" => "",
+			"a20" => "",
+			"a21" => "",
+			"a22" => "",
+			"a23" => "",
+			"a24" => "",
+			"a25" => "",
+			"a26" => "",
+			"a27" => "",
+			"a28" => "",
+			"a29" => "",
+			"a30" => "",
+			"a31" => ""
+		];
 		$attends = [];
 		foreach($staffs as $staff){
 			$attend = Attends::where('user_id', $staff->id)->where("year", $year)->where("month", $month)->first();
@@ -1375,6 +1723,7 @@ class CompanyController extends Controller
 				$attend->a31 = '';
 				$attend->year = $year;
 				$attend->month = $month;
+				$attend->notes = json_encode($note);
 				$attend->save();
 			}
 			$attends[] = $attend;
@@ -1452,8 +1801,23 @@ class CompanyController extends Controller
 
 		return "ok";
 	}
-	
-	
+
+	public function sheet_delete(Request $request){	
+		$sheet = Sheets::find($request->sel);
+		$sheet->deleted_flag = "1";
+		if ($sheet->save()) {
+			return "ok";
+		}
+	}
+
+	public function sheet_return(Request $request){	
+		$sheet = Sheets::find($request->sel);
+		$sheet->deleted_flag = "0";
+		if ($sheet->save()) {
+			return "ok";
+		}
+	}
+
 	public function metaitem_add(Request $request){
 		$metaitem = $request->metaitem;
 		$description = $request->description;
@@ -1571,7 +1935,10 @@ class CompanyController extends Controller
 		$new_user->metaitem = $req["mate"];
 		$new_user->role = 2;
 		$new_user->avatar = $req["avatar"];
-		$new_user->total_work_time = $req["total_work_time"];
+		$new_user->first_day = $req["first_day"];
+		$new_user->second_day = $req["second_day"];
+		$new_user->third_day = $req["third_day"];
+		$new_user->fourth_day = $req["fourth_day"];
 		$new_user->salary_date = $req["salary_date"];
 		$new_user->idm = $req["idm"];
 		$new_user->job_id = $req["job_id"];
@@ -1647,13 +2014,14 @@ class CompanyController extends Controller
 		$metaitems = Metaitem::where('company_id', $company->id)->get();
 		$job = Job::where('company_id', $company->id)->get();
 		$company_avart = "";
-		$mat = Material::where('user_id', $user->id)->get();	
+		$mat = Material::where('user_id', $user->id)->get();
+		$time = Worktime::where('company_id', $company->id)->first();
 		if(count($mat) > 0){
 			$company_avart = $mat[0]["dt1"];
 		}
 
 		if(count($departments) > 0){
-			return view('company.staff_add',  ['user' => $user, 'company' => $company, 'departments'=>$departments, 'sub_department' => $sub_department, 'metaitems'=>$metaitems, 'company_avart'=>$company_avart, 'job'=>$job]);
+			return view('company.staff_add',  ['user' => $user, 'company' => $company, 'departments'=>$departments, 'sub_department' => $sub_department, 'metaitems'=>$metaitems, 'company_avart'=>$company_avart, 'job'=>$job, 'time'=>$time]);
 		}else{
 			return redirect()->route('company.department_list');
 		}
@@ -2205,12 +2573,29 @@ class CompanyController extends Controller
 		$year = explode("-", $request->data)[0];
 		$month = explode("-", $request->data)[1];
 		$attend_data = Attends::where('id', $request->id)->where('year', $year)->where('month', $month)->first();
-		$data = $attend_data['a'.$request->day];
-		return json_decode($data);
+		$note = json_decode($attend_data["notes"]);
+		$note_key = "a".$request->day;
+		$data = [
+			"standTime" => $attend_data['s'.$request->day],
+			"stampTime" => $attend_data['a'.$request->day],
+			"note" => $note->$note_key
+		];
+		return response()->json($data); 
 	}
 
 	public function attend_update(Request $request) {
 		$update_attend = Attends::where('id', $request->att_id)->first();
+		$shift_time = json_decode($update_attend["s".$request->att_day]);
+		$shift_time->ot = $request->shift_open_time;
+		$shift_time->ct = $request->shift_close_time;
+		$update_attend["s".$request->att_day] = json_encode($shift_time);
+		if($update_attend->save()) {
+			$notes = json_decode($update_attend->notes);
+			$note_key = "a".$request->att_day;
+			$notes->$note_key = $request->note;
+			$update_attend->notes = json_encode($notes);
+			$update_attend->save();
+		}
 		if (empty($update_attend["a".$request->att_day])) {
 			$sheet_data = json_decode($update_attend["s".$request->att_day]);
 			$sheet_data->ot = $request->open_time;
@@ -2230,4 +2615,38 @@ class CompanyController extends Controller
 		}
 		return back();
 	}
+
+	public function shift_set(Request $request) {
+		$sheet = Sheets::find($request->sheet_id);
+		
+		$attend = Attends::where('id', $request->user_id)
+						 ->where('year', $request->year)
+						 ->where('month', $request->month)
+						 ->first();
+	
+		if (isset($sheet->rest_time)) {
+			$rest_time = explode("\n", $sheet->rest_time);
+			$shift = [
+				'sh' => $request->sheet_id,
+				'rd' => $sheet->rest_day,
+				'ot' => $sheet->open_time,
+				'ct' => $sheet->close_time,
+				'rs' => isset($rest_time[0]) ? $rest_time[0] : '',
+				're' => isset($rest_time[1]) ? $rest_time[1] : ''
+			];
+		} else {
+			$shift = [
+				'sh' => $request->sheet_id,
+				'rd' => $sheet->rest_day,
+				'ot' => $sheet->open_time,
+				'ct' => $sheet->close_time,
+				'rs' => '',
+				're' => ''
+			];
+		}
+		$attend["s".$request->day] = json_encode($shift);
+		$attend->save();
+		return redirect()->route("company.attend_list_month");
+	}
+	
 }

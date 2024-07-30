@@ -77,7 +77,10 @@ class Attends extends Model
 		'a28',
 		'a29',
 		'a30',
-		'a31'
+		'a31',
+		'year',
+		'month',
+		'notes'
 
 	];
 	

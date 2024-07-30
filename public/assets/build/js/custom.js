@@ -2528,6 +2528,51 @@ function init_DataTables() {
             });
         }
     };
+    var handleDataTableButtons3 = function () {
+        if ($("#datatable-buttons3").length) {
+            $("#datatable-buttons3").DataTable({
+                dom: "firtpB",
+                buttons: [
+                    {
+                        extend: "csv",
+                        text: "CSVダウンロード",
+                        className: "btn-sm btn-primary"
+                    }
+                ],
+                responsive: false
+            });
+        }
+    };
+    var handleDataTableButtons4 = function () {
+        if ($("#datatable-buttons4").length) {
+            $("#datatable-buttons4").DataTable({
+                dom: "firtpB",
+                buttons: [
+                    {
+                        extend: "csv",
+                        text: "CSVダウンロード",
+                        className: "btn-sm btn-primary"
+                    }
+                ],
+                responsive: false
+            });
+        }
+    };
+    var handleDataTableButtons5 = function () {
+        if ($("#datatable-buttons5").length) {
+            $("#datatable-buttons5").DataTable({
+                dom: "firtpB",
+                buttons: [
+                    {
+                        extend: "csv",
+                        text: "CSVダウンロード",
+                        className: "btn-sm btn-primary"
+                    }
+                ],
+                responsive: false
+            });
+        }
+    };
 
     TableManageButtons = function () {
         "use strict";
@@ -2536,6 +2581,9 @@ function init_DataTables() {
                 handleDataTableButtons();
                 handleDataTableButtons1();
                 handleDataTableButtons2();
+                handleDataTableButtons3();
+                handleDataTableButtons4();
+                handleDataTableButtons5();
             }
         };
     }();

@@ -26,7 +26,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card-box table-responsive">
-                                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                        <table id="datatable-buttons3" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>従業員ID</th>
@@ -38,9 +38,7 @@
                                                     <th>住所</th>
                                                     <th>電話番号</th>
                                                     <th>国籍</th>
-                                                    {{-- <th>部署</th> --}}
                                                     <th>入社日</th>
-                                                    {{-- <th>アクション</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -55,13 +53,7 @@
                                                     <td>{{ $staff_item->pref }}{{ $staff_item->addr }}{{ $staff_item->str }}</td>
                                                     <td>{{ $staff_item->phone }}</td>
                                                     <td>{{ $staff_item->country }}</td>
-                                                    {{-- <td>{{ App\Models\Department::find($staff_item->depart_id)->depart }}</td> --}}
                                                     <td>{{ explode(" ", $staff_item->created_at)[0] }}</td>
-                                                    {{-- <td>
-                                                        <a href="{{ route('company.staff_detail', $staff_item->id) }}"><i class="fa fa-eye"></i></a>
-                                                        <a href="{{ route('company.staff_edit', $staff_item->id) }}"><i class="fa fa-edit"></i></a>
-                                                        <a href="{{ route('company.staff_delete', $staff_item->id) }}"><i class="fa fa-trash"></i></a>
-                                                    </td> --}}
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -74,7 +66,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card-box table-responsive">
-                                        <table id="datatable-responsive1" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                        <table id="datatable-buttons4" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>従業員ID</th>
@@ -86,9 +78,7 @@
                                                     <th>住所</th>
                                                     <th>電話番号</th>
                                                     <th>国籍</th>
-                                                    {{-- <th>部署</th> --}}
                                                     <th>入社日</th>
-                                                    {{-- <th>アクション</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -103,13 +93,7 @@
                                                     <td>{{ $staff_item->pref }}{{ $staff_item->addr }}{{ $staff_item->str }}</td>
                                                     <td>{{ $staff_item->phone }}</td>
                                                     <td>{{ $staff_item->country }}</td>
-                                                    {{-- <td>{{ App\Models\Department::find($staff_item->depart_id)->depart }}</td> --}}
                                                     <td>{{ explode(" ", $staff_item->created_at)[0] }}</td>
-                                                    {{-- <td>
-                                                        <a href="{{ route('company.staff_detail', $staff_item->id) }}"><i class="fa fa-eye"></i></a>
-                                                        <a href="{{ route('company.staff_edit', $staff_item->id) }}"><i class="fa fa-edit"></i></a>
-                                                        <a href="{{ route('company.staff_delete', $staff_item->id) }}"><i class="fa fa-trash"></i></a>
-                                                    </td> --}}
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -122,7 +106,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card-box table-responsive">
-                                        <table id="datatable-responsive2" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                        <table id="datatable-buttons5" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>従業員ID</th>
@@ -134,9 +118,7 @@
                                                     <th>住所</th>
                                                     <th>電話番号</th>
                                                     <th>国籍</th>
-                                                    {{-- <th>部署</th> --}}
                                                     <th>入社日</th>
-                                                    {{-- <th>アクション</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -151,13 +133,7 @@
                                                     <td>{{ $staff_item->pref }}{{ $staff_item->addr }}{{ $staff_item->str }}</td>
                                                     <td>{{ $staff_item->phone }}</td>
                                                     <td>{{ $staff_item->country }}</td>
-                                                    {{-- <td>{{ App\Models\Department::find($staff_item->depart_id)->depart }}</td> --}}
                                                     <td>{{ explode(" ", $staff_item->created_at)[0] }}</td>
-                                                    {{-- <td>
-                                                        <a href="{{ route('company.staff_detail', $staff_item->id) }}"><i class="fa fa-eye"></i></a>
-                                                        <a href="{{ route('company.staff_edit', $staff_item->id) }}"><i class="fa fa-edit"></i></a>
-                                                        <a href="{{ route('company.staff_delete', $staff_item->id) }}"><i class="fa fa-trash"></i></a>
-                                                    </td> --}}
                                                 </tr>
                                                 @endforeach
                                             </tbody>

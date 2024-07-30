@@ -110,6 +110,8 @@ Route::group(['middleware' => ['auth', 'company.admin']], function() {
 		Route::post('/sheet_add',[CompanyController::class, 'sheet_add'])->name('company.sheet_add');
 		Route::post('/sheet_save',[CompanyController::class, 'sheet_save'])->name('company.sheet_save');
 		Route::get('/sheet_sel_info',[CompanyController::class, 'sheet_sel_info'])->name('company.sheet_sel_info');
+		Route::post('/sheet_delete',[CompanyController::class, 'sheet_delete'])->name('company.sheet_delete');
+		Route::post('/sheet_return',[CompanyController::class, 'sheet_return'])->name('company.sheet_return');
 
 		Route::get('/attend_list',[CompanyController::class, 'attend_list'])->name('company.attend_list');
 		Route::post('/day_attend_list', [CompanyController::class, 'day_attend_list'])->name('company.attend_search_day');
@@ -118,7 +120,7 @@ Route::group(['middleware' => ['auth', 'company.admin']], function() {
 		Route::get('/attend_list_month',[CompanyController::class, 'attend_list_month'])->name('company.attend_list_month');
 		Route::get('/attend_sheet_set',[CompanyController::class, 'attend_sheet_set'])->name('company.attend_sheet_set');
 		Route::get('/user_attend/{id}',[CompanyController::class, 'user_attend'])->name('company.user_attend');
-		Route::get('/user_attend/{id}/{day}',[CompanyController::class, 'day_user_attend'])->name('company.day_user_attend');
+		Route::post('/month_user_attend',[CompanyController::class, 'month_user_attend'])->name('company.month_user_attend');
 
 		Route::get('/staff_bug',[CompanyController::class, 'staff_bug'])->name('company.staff_bug');
 
@@ -130,6 +132,9 @@ Route::group(['middleware' => ['auth', 'company.admin']], function() {
 		Route::post('/attendlist',[CompanyController::class, 'get_attendList'])->name('attendList.month');
 		Route::post('/get_attend_data',[CompanyController::class, 'get_attend_data'])->name('company.get_attend_data');
 		Route::post('/attend_update',[CompanyController::class, 'attend_update'])->name('company.attend_update');
+		Route::post('/shift_set',[CompanyController::class, 'shift_set'])->name('company.shift_set');
+		Route::post('/staff_leave',[CompanyController::class, 'staff_leave'])->name('company.staff_leave');
+		Route::post('/return_leave',[CompanyController::class, 'return_leave'])->name('company.return_leave');
 	});
 });
 Route::group(['middleware' => ['auth', 'user']], function() {
