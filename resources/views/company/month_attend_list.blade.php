@@ -185,7 +185,7 @@
                                                 <th class="text-center text-success" style="min-width: 55px;">遅刻<br>日数</th>
                                                 <th class="text-center text-warning" style="min-width: 55px;">早退<br>日数</th>
                                                 <th class="text-center text-danger" style="min-width: 55px;">欠勤<br>日数</th>
-                                                <th class="text-center" style="min-width: 85px;">所定労働時間<br>稼働時間</th>
+                                                <th class="text-center" style="min-width: 85px;">所定労働時間<br>実働時間</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -497,7 +497,7 @@ function sel_sheet() {
                 }
 
                 if (data["rest_apply"] == 'on') {
-                    text += '<div class="mb-1"> 休憩時間 : : ' + data["rest_time"] + '</div>';
+                    text += '<div class="mb-1"> 休憩時間 : ' + data["rest_open_time"] +`~`+ data["rest_close_time"] + '</div>';
                 }
 
                 $("#sheet_info").html(text);

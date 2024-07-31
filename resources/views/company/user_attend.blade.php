@@ -123,7 +123,7 @@
                                 <th class="text-center">退勤時間</th>
                                 <th class="text-center">労働時間</th>
                                 <th class="text-center">残業時間</th>
-                                <th class="text-center">深夜時間</th>
+                                <th class="text-center">深夜労働時間</th>
                                 <th class="text-center">休憩時間</th>
                                 <th class="text-center">備考</th>
                             </tr>
@@ -158,6 +158,9 @@
                                 $holiday_minutes = 0;
                                 $weekday_hours = 0;
                                 $weekday_minutes = 0;
+                                $stampTime_ = 0;
+                                $night_rs_time = 0;
+                                
                             @endphp
                             <?php $user = App\Models\User::find($user_id); ?>
                             @foreach ($dates as $date)
@@ -380,10 +383,10 @@
                                             $overTime = gmdate("H:i", $overTime_);
                                             if ($ah_ot >= $nightStandardOpenTime) {
                                                 $stampTime_ = $ah_ct - $ah_ot;
-                                                $stampTime = gmdate("H:i", $stampTime_);
                                                 $night_rs_time = strtotime($ah->re) - strtotime($ah->rs);
+                                                $stampTime = gmdate("H:i", $stampTime_ - $night_rs_time);
                                                 if ($yo != "(土)" && $yo != "(日)") {
-                                                    list($night_start_hours, $night_start_minutes) = explode(':', $stampTime);
+                                                    list($night_start_hours, $night_start_minutes) = explode(':', gmdate("H:i", $stampTime_));
                                                     list($night_end_hours, $night_end_minutes) = explode(':', gmdate("H:i", $night_rs_time));
                                                     $night_start_minutes = (int)$night_start_hours * 60 + (int)$night_start_minutes;
                                                     $night_end_minutes = (int)$night_end_hours * 60 + (int)$night_end_minutes;
@@ -392,6 +395,7 @@
                                                         $night_hours += floor($night_work_time_ / 60);
                                                         $night_minutes += $night_work_time_ % 60;
                                                     }
+
                                                 }
                                             } else {
                                                 $stampTime = "00:00";
@@ -444,7 +448,7 @@
 </div>
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-sm">
-        <form action="{{ route("company.attend_update") }}" method="post">
+        <form action="{{ route("company.attend_update") }}" method="post" id="timeForm">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -569,6 +573,15 @@
                             const stampTime = JSON.parse(data.stampTime);
                             $("#open_time").val(stampTime.ot);
                             $("#close_time").val(stampTime.ct);
+                            const restStarttime = document.getElementById('rest_start_time');
+                            const restEndtime = document.getElementById('rest_end_time');
+                            const minTime = stampTime.ot;
+                            const maxTime = stampTime.ct;
+                            restStarttime.setAttribute('min', minTime);
+                            restStarttime.setAttribute('max', maxTime);
+                            restEndtime.setAttribute('min', minTime);
+                            restEndtime.setAttribute('max', maxTime);
+
                             $("#rest_start_time").val(stampTime.rs);
                             $("#rest_end_time").val(stampTime.re);
                         } else {
@@ -595,5 +608,16 @@
                 }
             });
         }
+        document.getElementById('timeForm').addEventListener('submit', function(event) {
+            const timeValue = timeInput.value;
+            const errorMessage = document.getElementById('error-message');
+            
+            if (timeValue < minTime || timeValue > maxTime) {
+                event.preventDefault();
+                errorMessage.textContent = `Please choose a time between ${minTime} and ${maxTime}.`;
+            } else {
+                errorMessage.textContent = '';
+            }
+        });
     </script>
 @endsection

@@ -1747,11 +1747,6 @@ class CompanyController extends Controller
 		return $sheets;
 	}
 	public function sheet_add(Request $request){
-		// $metaitem = $request->metaitem;
-		// $description = $request->description;
-		// $kind = $request->kind;
-		// $metaitem_id = $request->metaitem_id;
-
 		$user = Auth::user();
 		$company = Company::where('user_id', $user->id)->first();
 
@@ -1765,15 +1760,12 @@ class CompanyController extends Controller
 		$sheet->rest_day = $request->rest_day;
 		$sheet->open_time = $request->open_time;
 		$sheet->close_time = $request->close_time;
-		$sheet->rest_time = $request->rest_time;
+		$sheet->rest_open_time = $request->rest_open_time;
+		$sheet->rest_close_time = $request->rest_close_time;
 		$sheet->rest_apply = $request->rest_apply;
 
 		$sheet->minashi = $request->minashi;
 		$sheet->ch_sheet = $request->ch_sheet;
-
-		// $dep->description = $description;	
-		// $dep->kind = $kind;
-		// $dep->metaitem_id = $metaitem_id;	
 
 		$sheet->save();
 
@@ -1791,7 +1783,8 @@ class CompanyController extends Controller
 		$sheet->rest_day = $request->rest_day;
 		$sheet->open_time = $request->open_time;
 		$sheet->close_time = $request->close_time;
-		$sheet->rest_time = $request->rest_time;
+		$sheet->rest_open_time = $request->rest_open_time;
+		$sheet->rest_close_time = $request->rest_close_time;
 		$sheet->rest_apply = $request->rest_apply;
 
 		$sheet->minashi = $request->minashi;
@@ -2624,15 +2617,15 @@ class CompanyController extends Controller
 						 ->where('month', $request->month)
 						 ->first();
 	
-		if (isset($sheet->rest_time)) {
-			$rest_time = explode("\n", $sheet->rest_time);
+		if (isset($sheet->rest_open_time) && isset($sheet->rest_close_time)) {
+			// $rest_time = explode("\n", $sheet->rest_time);
 			$shift = [
 				'sh' => $request->sheet_id,
 				'rd' => $sheet->rest_day,
 				'ot' => $sheet->open_time,
 				'ct' => $sheet->close_time,
-				'rs' => isset($rest_time[0]) ? $rest_time[0] : '',
-				're' => isset($rest_time[1]) ? $rest_time[1] : ''
+				'rs' => $sheet->rest_open_time,
+				're' => $sheet->rest_close_time
 			];
 		} else {
 			$shift = [

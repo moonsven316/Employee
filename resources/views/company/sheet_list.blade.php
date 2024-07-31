@@ -57,7 +57,7 @@
                                             <p class="mb-1">
                                                 休憩時間 :
                                                 <br>
-                                                {{$sheet->rest_time}}
+                                                {{$sheet->rest_open_time}} {{ $sheet->rest_close_time }}
                                             </p>
                                             @endif
                                         </div>
@@ -148,24 +148,28 @@
                                                     class="form-control  ">
                                             </div>
                                         </div>
-        
                                     </div>
-        
                                     <div class="col-md-12 col-sm-12 ">
                                         <div class="form-group row">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">休憩時間
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">休憩開始時間
                                                 <span class="required">*</span>
                                             </label>
-                                            <div class="col-md-5 col-sm-5 ">
-                                                <Textarea id="rest_time" name="rest_time" class="form-control  "></Textarea>
-                                            </div>
-                                            <div class="col-md-5col-sm-5 ml-2">
-                                                ※休憩時間入力<br>
-                                                11:00~12:00<br>
-                                                15:00~16:00
+                                            <div class="col-md-9 col-sm-9 ">
+                                                <input type="time" id="rest_open_time" name="rest_open_time" required="required"
+                                                    class="form-control  ">
                                             </div>
                                         </div>
-        
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">休憩終了時間
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9 ">
+                                                <input type="time" id="rest_close_time" name="rest_close_time" required="required"
+                                                    class="form-control  ">
+                                            </div>
+                                        </div>
                                     </div>
         
                                     <div class="col-md-12 col-sm-12 ">
@@ -316,7 +320,8 @@ function sheet_add() {
 
             open_time: $("#open_time").val(),
             close_time: $("#close_time").val(),
-            rest_time: $("#rest_time").val(),
+            rest_open_time: $("#rest_open_time").val(),
+            rest_close_time: $("#rest_close_time").val(),
             rest_apply: $("#rest_apply").val(),
 
             minashi: $("input[name=minashi]").filter(":checked").val(),
@@ -353,7 +358,8 @@ function sheet_save() {
                 sel_id: $("#sel_id").val(),
                 open_time: $("#open_time").val(),
                 close_time: $("#close_time").val(),
-                rest_time: $("#rest_time").val(),
+                rest_open_time: $("#rest_open_time").val(),
+                rest_close_time: $("#rest_close_time").val(),
                 rest_apply: $("#rest_apply").val(),
                 minashi: $("input[name=minashi]").filter(":checked").val(),
                 ch_sheet: $("#ch_sheet").val(),
@@ -386,7 +392,8 @@ function sel_sheet(sel) {
             $("#rest_day").val(data["rest_day"]);
             $("#open_time").val(data["open_time"]);
             $("#close_time").val(data["close_time"]);
-            $("#rest_time").val(data["rest_time"]);
+            $("#rest_open_time").val(data["rest_open_time"]);
+            $("#rest_close_time").val(data["rest_open_time"]);
 
             $("#rest_apply").val(data["rest_apply"]);
 
