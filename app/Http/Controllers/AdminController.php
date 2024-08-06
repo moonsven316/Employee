@@ -57,18 +57,17 @@ class AdminController extends Controller
 
 		// }
 		$company_menu = Company::all();
-		$company = Company::first();
 		// dd($company);
-		$user = User::find($company->user_id);
-		$material = Material::where('user_id', $company->user_id)->first();
 		if(count($company_menu) > 0){
+			$company = Company::first();
+			$user = User::find($company->user_id);
+			$material = Material::where('user_id', $company->user_id)->first();
 			return view('admin.dashboard',  compact('company_menu', 'company', 'user', 'material'));
 		}else{
 			return redirect()->route('admin.create_company');
 		}
 
 	}
-
 	public function company(Request $request)
 	{
 		$company_menu = Company::all();
@@ -292,12 +291,16 @@ class AdminController extends Controller
 
 	public function profile_save(Request $request)
 	{
+		// dd($request);
 		$user_id = Auth::user()->id;
 		$admin = User::find($user_id);
 		$admin->user_name = $request->user_name;
 		$admin->user_name_g = $request->user_name_g;
-		$admin->post_code = $request->post_code;
-		$admin->address = $request->address;
+		$admin->zip1 = $request->zip1;
+		$admin->zip2 = $request->zip2;
+		$admin->pref = $request->pref;
+		$admin->addr = $request->addr;
+		$admin->str = $request->str;
 		$admin->country = $request->country;
 		$admin->phone = $request->phone;
 		$admin->birthday = $request->birthday;

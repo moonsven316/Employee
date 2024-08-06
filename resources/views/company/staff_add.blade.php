@@ -90,7 +90,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            {{-- <input type="mail" id="email" name="email" required="required" class="form-control"> --}}
+                                                            {{-- <input type="mail" id="email" name="email" class="form-control"> --}}
                                                             <input type="text" id="email" name="email" data-inputmask="'alias': 'email'" class="form-control" im-insert="true" required>
                                                             @error('email')
                                                                 <span class="text-danger">メールは必須です。</span>
@@ -104,7 +104,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="mail" id="name" name="name" required="required" class="form-control">
+                                                            <input type="mail" id="name" name="name" class="form-control">
                                                             @error('name')
                                                                 <span class="text-danger">ユーザーIDはすでに取られています。</span>
                                                             @enderror
@@ -142,7 +142,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="text" id="idm" name="idm" required="required" class="form-control">
+                                                            <input type="text" id="idm" name="idm" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -169,13 +169,13 @@
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
                                                             <div class="col-md-12 col-sm-12 p-0 pb-1">
-                                                                <input type="text" id="user_name" name="user_name" required="required" class="form-control  ">
+                                                                <input type="text" id="user_name" name="user_name" class="form-control  ">
                                                                 @error('user_name')
                                                                     <span class="text-danger">この項目は必須です。</span><br>
                                                                 @enderror
                                                             </div>
                                                             <div class="col-md-12 col-sm-12 p-0">
-                                                                <input type="text" id="user_name_g" name="user_name_g" required="required" class="form-control  ">
+                                                                <input type="text" id="user_name_g" name="user_name_g" class="form-control  ">
                                                                 @error('user_name_g')
                                                                     <span class="text-danger">この項目は必須です。</span>
                                                                 @enderror
@@ -188,9 +188,9 @@
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
                                                             <div class="col-md-12 col-sm-12 p-0 pb-1 d-flex">
-                                                                <input type="text" name="zip1" size="4" maxlength="3" class="form-control" required>
+                                                                <input type="text" name="zip1" placeholder="000" size="4" maxlength="3" class="form-control" required>
                                                                 <span>－</span>
-                                                                <input class="form-control" type="text" name="zip2" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');" required>
+                                                                <input class="form-control" type="text" name="zip2" placeholder="0000" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');" required>
                                                             </div>
                                                             @error('zip1')
                                                                 <span class="text-danger">郵便番号はすでに取られています。</span><br>
@@ -207,19 +207,19 @@
                                                         <div class="col-md-8 col-sm-8 ">
                                                             <div class="col-md-12 col-sm-12 p-0">
                                                                 <div class="col-md-12 col-sm-12 p-0 pb-1">
-                                                                    <input class="form-control" type="text" name="pref" required>
+                                                                    <input class="form-control" type="text" name="pref" placeholder="東京都" required>
                                                                     @error('pref')
                                                                         <span class="text-danger">この項目は必須です。</span>
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-md-12 col-sm-12 p-0 pb-1">
-                                                                    <input class="form-control" type="text" name="addr" required>
+                                                                    <input class="form-control" type="text" name="addr" placeholder="品川区" required>
                                                                     @error('addr')
                                                                         <span class="text-danger">この項目は必須です。</span>
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-md-12 col-sm-12 p-0">
-                                                                    <input class="form-control" type="text" name="str" required>
+                                                                    <input class="form-control" type="text" name="str" placeholder="0-0-0" required>
                                                                     @error('str')
                                                                         <span class="text-danger">この項目は必須です。</span>
                                                                     @enderror
@@ -232,7 +232,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="text" id="country" name="country" required="required" class="form-control">
+                                                            <input type="text" id="country" name="country" class="form-control">
                                                             @error('country')
                                                                 <span class="text-danger">国籍はすでに取られています。</span>
                                                             @enderror
@@ -243,7 +243,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="text" id="phone" name="phone" required="required" data-inputmask="'mask' : '(999) 999-9999'" class="form-control  ">
+                                                            <input type="text" id="phone" name="phone" data-inputmask="'mask' : '999 9999 9999'" class="form-control  ">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -293,7 +293,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="date" id="birthday" name="birthday" required="required" class="form-control  ">
+                                                            <input type="date" id="birthday" name="birthday" class="form-control  ">
                                                             @error('birthday')
                                                                 <span class="text-danger">生年月日はすでに取られています。</span>
                                                             @enderror
@@ -308,7 +308,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="text" id="social_num" name="social_num" required="required" class="form-control  ">
+                                                            <input type="text" id="social_num" name="social_num" class="form-control  ">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -318,7 +318,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="text" id="employ_num" name="employ_num" required="required" class="form-control  ">
+                                                            <input type="text" id="employ_num" name="employ_num" class="form-control  ">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -498,35 +498,34 @@
                                         </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="work-days">
-                                        <div data-parsley-validate class="form-horizontal form-label-left">
-                                            @csrf
+                                        <div class="form-horizontal form-label-left">
                                             <input type="hidden" name="time_id" value="{{ $time->id }}">
                                             <div class="item form-group">
                                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="first_day">28日 <span class="required">*</span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="first_day" name="first_day" required="required" class="form-control " value="{{ $time->first_day }}">
+                                                    <input type="number" id="first_day" name="first_day" class="form-control " value="{{ $time->first_day }}">
                                                 </div>
                                             </div>
                                             <div class="item form-group">
                                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="second_day">29日 <span class="required">*</span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="second_day" name="second_day" required="required" class="form-control" value="{{ $time->second_day }}">
+                                                    <input type="number" id="second_day" name="second_day" class="form-control" value="{{ $time->second_day }}">
                                                 </div>
                                             </div>
                                             <div class="item form-group">
                                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="third_day">30日 <span class="required">*</span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="third_day" name="third_day" required="required" class="form-control" value="{{ $time->third_day }}">
+                                                    <input type="number" id="third_day" name="third_day" class="form-control" value="{{ $time->third_day }}">
                                                 </div>
                                             </div>
                                             <div class="item form-group">
                                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="fourth_day">31日 <span class="required">*</span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="fourth_day" name="fourth_day" required="required" class="form-control" value="{{ $time->fourth_day }}">
+                                                    <input type="number" id="fourth_day" name="fourth_day" class="form-control" value="{{ $time->fourth_day }}">
                                                 </div>
                                             </div>
                                             <div class="ln_solid"></div>

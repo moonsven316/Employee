@@ -563,15 +563,15 @@ class CompanyController extends Controller
 						}
 						$att->{"s".$d} = json_encode ($sheet_info);
 					}
-					$att->a1 = '';
-					$att->a2 = '';
-					$att->a3 = '';
-					$att->a4 = '';
-					$att->a5 = '';
-					$att->a6 = '';
-					$att->a7 = '';
-					$att->a8 = '';
-					$att->a9 = '';
+					$att->a01 = '';
+					$att->a02 = '';
+					$att->a03 = '';
+					$att->a04 = '';
+					$att->a05 = '';
+					$att->a06 = '';
+					$att->a07 = '';
+					$att->a08 = '';
+					$att->a09 = '';
 					$att->a10 = '';
 					$att->a11 = '';
 					$att->a12 = '';
@@ -689,15 +689,15 @@ class CompanyController extends Controller
 						// dd($sheet_info);
 						$att->{"s".$d} = json_encode ($sheet_info);
 					}
-					$att->a1 = '';
-					$att->a2 = '';
-					$att->a3 = '';
-					$att->a4 = '';
-					$att->a5 = '';
-					$att->a6 = '';
-					$att->a7 = '';
-					$att->a8 = '';
-					$att->a9 = '';
+					$att->a01 = '';
+					$att->a02 = '';
+					$att->a03 = '';
+					$att->a04 = '';
+					$att->a05 = '';
+					$att->a06 = '';
+					$att->a07 = '';
+					$att->a08 = '';
+					$att->a09 = '';
 					$att->a10 = '';
 					$att->a11 = '';
 					$att->a12 = '';
@@ -805,15 +805,15 @@ class CompanyController extends Controller
 						}
 						$att->{"s".$d} = json_encode ($sheet_info);
 					}
-					$att->a1 = '';
-					$att->a2 = '';
-					$att->a3 = '';
-					$att->a4 = '';
-					$att->a5 = '';
-					$att->a6 = '';
-					$att->a7 = '';
-					$att->a8 = '';
-					$att->a9 = '';
+					$att->a01 = '';
+					$att->a02 = '';
+					$att->a03 = '';
+					$att->a04 = '';
+					$att->a05 = '';
+					$att->a06 = '';
+					$att->a07 = '';
+					$att->a08 = '';
+					$att->a09 = '';
 					$att->a10 = '';
 					$att->a11 = '';
 					$att->a12 = '';
@@ -856,15 +856,15 @@ class CompanyController extends Controller
 						->where('role', 2)
 						->get();
 		$note = [
-			"a1" => "",
-			"a2" => "",
-			"a3" => "",
-			"a4" => "",
-			"a5" => "",
-			"a6" => "",
-			"a7" => "",
-			"a8" => "",
-			"a9" => "",
+			"a01" => "",
+			"a02" => "",
+			"a03" => "",
+			"a04" => "",
+			"a05" => "",
+			"a06" => "",
+			"a07" => "",
+			"a08" => "",
+			"a09" => "",
 			"a10" => "",
 			"a11" => "",
 			"a12" => "",
@@ -901,15 +901,15 @@ class CompanyController extends Controller
 				$attend->company_id = $company->id;
 				$attend->depart_id = $staff->depart_id;
 				$attend->user_name = $staff->user_name;
-				$attend->s1 = '';
-				$attend->s2 = '';
-				$attend->s3 = '';
-				$attend->s4 = '';
-				$attend->s5 = '';
-				$attend->s6 = '';
-				$attend->s7 = '';
-				$attend->s8 = '';
-				$attend->s9 = '';
+				$attend->s01 = '';
+				$attend->s02 = '';
+				$attend->s03 = '';
+				$attend->s04 = '';
+				$attend->s05 = '';
+				$attend->s06 = '';
+				$attend->s07 = '';
+				$attend->s08 = '';
+				$attend->s09 = '';
 				$attend->s10 = '';
 				$attend->s11 = '';
 				$attend->s12 = '';
@@ -932,15 +932,15 @@ class CompanyController extends Controller
 				$attend->s29 = '';
 				$attend->s30 = '';
 				$attend->s31 = '';
-				$attend->a1 = '';
-				$attend->a2 = '';
-				$attend->a3 = '';
-				$attend->a4 = '';
-				$attend->a5 = '';
-				$attend->a6 = '';
-				$attend->a7 = '';
-				$attend->a8 = '';
-				$attend->a9 = '';
+				$attend->a01 = '';
+				$attend->a02 = '';
+				$attend->a03 = '';
+				$attend->a04 = '';
+				$attend->a05 = '';
+				$attend->a06 = '';
+				$attend->a07 = '';
+				$attend->a08 = '';
+				$attend->a09 = '';
 				$attend->a10 = '';
 				$attend->a11 = '';
 				$attend->a12 = '';
@@ -995,15 +995,15 @@ class CompanyController extends Controller
 						->where('role', 2)
 						->get();
 		$note = [
-			"a1" => "",
-			"a2" => "",
-			"a3" => "",
-			"a4" => "",
-			"a5" => "",
-			"a6" => "",
-			"a7" => "",
-			"a8" => "",
-			"a9" => "",
+			"a01" => "",
+			"a02" => "",
+			"a03" => "",
+			"a04" => "",
+			"a05" => "",
+			"a06" => "",
+			"a07" => "",
+			"a08" => "",
+			"a09" => "",
 			"a10" => "",
 			"a11" => "",
 			"a12" => "",
@@ -1040,15 +1040,15 @@ class CompanyController extends Controller
 				$attend->company_id = $company->id;
 				$attend->depart_id = $staff->depart_id;
 				$attend->user_name = $staff->user_name;
-				$attend->s1 = '';
-				$attend->s2 = '';
-				$attend->s3 = '';
-				$attend->s4 = '';
-				$attend->s5 = '';
-				$attend->s6 = '';
-				$attend->s7 = '';
-				$attend->s8 = '';
-				$attend->s9 = '';
+				$attend->s01 = '';
+				$attend->s02 = '';
+				$attend->s03 = '';
+				$attend->s04 = '';
+				$attend->s05 = '';
+				$attend->s06 = '';
+				$attend->s07 = '';
+				$attend->s08 = '';
+				$attend->s09 = '';
 				$attend->s10 = '';
 				$attend->s11 = '';
 				$attend->s12 = '';
@@ -1071,15 +1071,15 @@ class CompanyController extends Controller
 				$attend->s29 = '';
 				$attend->s30 = '';
 				$attend->s31 = '';
-				$attend->a1 = '';
-				$attend->a2 = '';
-				$attend->a3 = '';
-				$attend->a4 = '';
-				$attend->a5 = '';
-				$attend->a6 = '';
-				$attend->a7 = '';
-				$attend->a8 = '';
-				$attend->a9 = '';
+				$attend->a01 = '';
+				$attend->a02 = '';
+				$attend->a03 = '';
+				$attend->a04 = '';
+				$attend->a05 = '';
+				$attend->a06 = '';
+				$attend->a07 = '';
+				$attend->a08 = '';
+				$attend->a09 = '';
 				$attend->a10 = '';
 				$attend->a11 = '';
 				$attend->a12 = '';
@@ -1147,15 +1147,15 @@ class CompanyController extends Controller
 				$attend->company_id = $company->id;
 				$attend->depart_id = $staff->depart_id;
 				$attend->user_name = $staff->user_name;
-				$attend->s1 = '';
-				$attend->s2 = '';
-				$attend->s3 = '';
-				$attend->s4 = '';
-				$attend->s5 = '';
-				$attend->s6 = '';
-				$attend->s7 = '';
-				$attend->s8 = '';
-				$attend->s9 = '';
+				$attend->s01 = '';
+				$attend->s02 = '';
+				$attend->s03 = '';
+				$attend->s04 = '';
+				$attend->s05 = '';
+				$attend->s06 = '';
+				$attend->s07 = '';
+				$attend->s08 = '';
+				$attend->s09 = '';
 				$attend->s10 = '';
 				$attend->s11 = '';
 				$attend->s12 = '';
@@ -1178,15 +1178,15 @@ class CompanyController extends Controller
 				$attend->s29 = '';
 				$attend->s30 = '';
 				$attend->s31 = '';
-				$attend->a1 = '';
-				$attend->a2 = '';
-				$attend->a3 = '';
-				$attend->a4 = '';
-				$attend->a5 = '';
-				$attend->a6 = '';
-				$attend->a7 = '';
-				$attend->a8 = '';
-				$attend->a9 = '';
+				$attend->a01 = '';
+				$attend->a02 = '';
+				$attend->a03 = '';
+				$attend->a04 = '';
+				$attend->a05 = '';
+				$attend->a06 = '';
+				$attend->a07 = '';
+				$attend->a08 = '';
+				$attend->a09 = '';
 				$attend->a10 = '';
 				$attend->a11 = '';
 				$attend->a12 = '';
@@ -1228,15 +1228,15 @@ class CompanyController extends Controller
 	}
 	public function user_attend(Request $request) {
 		$note = [
-			"a1" => "",
-			"a2" => "",
-			"a3" => "",
-			"a4" => "",
-			"a5" => "",
-			"a6" => "",
-			"a7" => "",
-			"a8" => "",
-			"a9" => "",
+			"a01" => "",
+			"a02" => "",
+			"a03" => "",
+			"a04" => "",
+			"a05" => "",
+			"a06" => "",
+			"a07" => "",
+			"a08" => "",
+			"a09" => "",
 			"a10" => "",
 			"a11" => "",
 			"a12" => "",
@@ -1272,15 +1272,15 @@ class CompanyController extends Controller
 			$attend->company_id = $company->id;
 			$attend->depart_id = $staff->depart_id;
 			$attend->user_name = $staff->user_name;
-			$attend->s1 = '';
-			$attend->s2 = '';
-			$attend->s3 = '';
-			$attend->s4 = '';
-			$attend->s5 = '';
-			$attend->s6 = '';
-			$attend->s7 = '';
-			$attend->s8 = '';
-			$attend->s9 = '';
+			$attend->s01 = '';
+			$attend->s02 = '';
+			$attend->s03 = '';
+			$attend->s04 = '';
+			$attend->s05 = '';
+			$attend->s06 = '';
+			$attend->s07 = '';
+			$attend->s08 = '';
+			$attend->s09 = '';
 			$attend->s10 = '';
 			$attend->s11 = '';
 			$attend->s12 = '';
@@ -1303,15 +1303,15 @@ class CompanyController extends Controller
 			$attend->s29 = '';
 			$attend->s30 = '';
 			$attend->s31 = '';
-			$attend->a1 = '';
-			$attend->a2 = '';
-			$attend->a3 = '';
-			$attend->a4 = '';
-			$attend->a5 = '';
-			$attend->a6 = '';
-			$attend->a7 = '';
-			$attend->a8 = '';
-			$attend->a9 = '';
+			$attend->a01 = '';
+			$attend->a02 = '';
+			$attend->a03 = '';
+			$attend->a04 = '';
+			$attend->a05 = '';
+			$attend->a06 = '';
+			$attend->a07 = '';
+			$attend->a08 = '';
+			$attend->a09 = '';
 			$attend->a10 = '';
 			$attend->a11 = '';
 			$attend->a12 = '';
@@ -1353,15 +1353,15 @@ class CompanyController extends Controller
 	}
 	public function month_user_attend(Request $request) {
 		$note = [
-			"a1" => "",
-			"a2" => "",
-			"a3" => "",
-			"a4" => "",
-			"a5" => "",
-			"a6" => "",
-			"a7" => "",
-			"a8" => "",
-			"a9" => "",
+			"a01" => "",
+			"a02" => "",
+			"a03" => "",
+			"a04" => "",
+			"a05" => "",
+			"a06" => "",
+			"a07" => "",
+			"a08" => "",
+			"a09" => "",
 			"a10" => "",
 			"a11" => "",
 			"a12" => "",
@@ -1401,15 +1401,15 @@ class CompanyController extends Controller
 			$attend->company_id = $company->id;
 			$attend->depart_id = $staff->depart_id;
 			$attend->user_name = $staff->user_name;
-			$attend->s1 = '';
-			$attend->s2 = '';
-			$attend->s3 = '';
-			$attend->s4 = '';
-			$attend->s5 = '';
-			$attend->s6 = '';
-			$attend->s7 = '';
-			$attend->s8 = '';
-			$attend->s9 = '';
+			$attend->s01 = '';
+			$attend->s02 = '';
+			$attend->s03 = '';
+			$attend->s04 = '';
+			$attend->s05 = '';
+			$attend->s06 = '';
+			$attend->s07 = '';
+			$attend->s08 = '';
+			$attend->s09 = '';
 			$attend->s10 = '';
 			$attend->s11 = '';
 			$attend->s12 = '';
@@ -1432,15 +1432,15 @@ class CompanyController extends Controller
 			$attend->s29 = '';
 			$attend->s30 = '';
 			$attend->s31 = '';
-			$attend->a1 = '';
-			$attend->a2 = '';
-			$attend->a3 = '';
-			$attend->a4 = '';
-			$attend->a5 = '';
-			$attend->a6 = '';
-			$attend->a7 = '';
-			$attend->a8 = '';
-			$attend->a9 = '';
+			$attend->a01 = '';
+			$attend->a02 = '';
+			$attend->a03 = '';
+			$attend->a04 = '';
+			$attend->a05 = '';
+			$attend->a06 = '';
+			$attend->a07 = '';
+			$attend->a08 = '';
+			$attend->a09 = '';
 			$attend->a10 = '';
 			$attend->a11 = '';
 			$attend->a12 = '';
@@ -1507,15 +1507,15 @@ class CompanyController extends Controller
 				$attend->company_id = $company->id;
 				$attend->depart_id = $staff->depart_id;
 				$attend->user_name = $staff->user_name;
-				$attend->s1 = '';
-				$attend->s2 = '';
-				$attend->s3 = '';
-				$attend->s4 = '';
-				$attend->s5 = '';
-				$attend->s6 = '';
-				$attend->s7 = '';
-				$attend->s8 = '';
-				$attend->s9 = '';
+				$attend->s01 = '';
+				$attend->s02 = '';
+				$attend->s03 = '';
+				$attend->s04 = '';
+				$attend->s05 = '';
+				$attend->s06 = '';
+				$attend->s07 = '';
+				$attend->s08 = '';
+				$attend->s09 = '';
 				$attend->s10 = '';
 				$attend->s11 = '';
 				$attend->s12 = '';
@@ -1538,15 +1538,15 @@ class CompanyController extends Controller
 				$attend->s29 = '';
 				$attend->s30 = '';
 				$attend->s31 = '';
-				$attend->a1 = '';
-				$attend->a2 = '';
-				$attend->a3 = '';
-				$attend->a4 = '';
-				$attend->a5 = '';
-				$attend->a6 = '';
-				$attend->a7 = '';
-				$attend->a8 = '';
-				$attend->a9 = '';
+				$attend->a01 = '';
+				$attend->a02 = '';
+				$attend->a03 = '';
+				$attend->a04 = '';
+				$attend->a05 = '';
+				$attend->a06 = '';
+				$attend->a07 = '';
+				$attend->a08 = '';
+				$attend->a09 = '';
 				$attend->a10 = '';
 				$attend->a11 = '';
 				$attend->a12 = '';
@@ -1614,15 +1614,15 @@ class CompanyController extends Controller
 							->get();
 		}
 		$note = [
-			"a1" => "",
-			"a2" => "",
-			"a3" => "",
-			"a4" => "",
-			"a5" => "",
-			"a6" => "",
-			"a7" => "",
-			"a8" => "",
-			"a9" => "",
+			"a01" => "",
+			"a02" => "",
+			"a03" => "",
+			"a04" => "",
+			"a05" => "",
+			"a06" => "",
+			"a07" => "",
+			"a08" => "",
+			"a09" => "",
 			"a10" => "",
 			"a11" => "",
 			"a12" => "",
@@ -1659,15 +1659,15 @@ class CompanyController extends Controller
 				$attend->company_id = $company->id;
 				$attend->depart_id = $staff->depart_id;
 				$attend->user_name = $staff->user_name;
-				$attend->s1 = '';
-				$attend->s2 = '';
-				$attend->s3 = '';
-				$attend->s4 = '';
-				$attend->s5 = '';
-				$attend->s6 = '';
-				$attend->s7 = '';
-				$attend->s8 = '';
-				$attend->s9 = '';
+				$attend->s01 = '';
+				$attend->s02 = '';
+				$attend->s03 = '';
+				$attend->s04 = '';
+				$attend->s05 = '';
+				$attend->s06 = '';
+				$attend->s07 = '';
+				$attend->s08 = '';
+				$attend->s09 = '';
 				$attend->s10 = '';
 				$attend->s11 = '';
 				$attend->s12 = '';
@@ -1690,15 +1690,15 @@ class CompanyController extends Controller
 				$attend->s29 = '';
 				$attend->s30 = '';
 				$attend->s31 = '';
-				$attend->a1 = '';
-				$attend->a2 = '';
-				$attend->a3 = '';
-				$attend->a4 = '';
-				$attend->a5 = '';
-				$attend->a6 = '';
-				$attend->a7 = '';
-				$attend->a8 = '';
-				$attend->a9 = '';
+				$attend->a01 = '';
+				$attend->a02 = '';
+				$attend->a03 = '';
+				$attend->a04 = '';
+				$attend->a05 = '';
+				$attend->a06 = '';
+				$attend->a07 = '';
+				$attend->a08 = '';
+				$attend->a09 = '';
 				$attend->a10 = '';
 				$attend->a11 = '';
 				$attend->a12 = '';
@@ -2474,7 +2474,8 @@ class CompanyController extends Controller
 		$user = User::find($request->id);
 		$company = Company::find($user->company_id);
 		$material = Material::where('user_id', $user->id)->first();
-		return view('company.profile', compact('company', 'user', 'material'));
+		$password = Hash::check("company1234", $user->password);
+		return view('company.profile', compact('company', 'user', 'material', 'password'));
 	}
 
 	public function company_edit_save(Request $request)
@@ -2482,6 +2483,7 @@ class CompanyController extends Controller
 		$user = User::find($request->user_id);
 		$user->name = $request->name;
 		$user->email = $request->email;
+		$user->password = Hash::make($request->password);
 		$user->phone = $request->phone;
 		$user->zip1 = $request->zip1;
 		$user->zip2 = $request->zip2;
@@ -2494,7 +2496,7 @@ class CompanyController extends Controller
 
 		$company = Company::find($request->company_id);
 		$company->company_name = $request->company_name;
-		$company->seo_name = $request->seo_name;
+		// $company->seo_name = $request->seo_name;
 		$company->company_num = $request->company_num;
 		$company->employ_num = $request->employ_num;
 		$company->year_num = $request->year_num;
@@ -2616,7 +2618,27 @@ class CompanyController extends Controller
 						 ->where('year', $request->year)
 						 ->where('month', $request->month)
 						 ->first();
-	
+		if ($request->day == "1") {
+			$day = "01";
+		} elseif ($request->day == "2") {
+			$day = "02";
+		} elseif ($request->day == "3") {
+			$day = "03";
+		} elseif ($request->day == "4") {
+			$day = "04";
+		} elseif ($request->day == "5") {
+			$day = "05";
+		} elseif ($request->day == "6") {
+			$day = "06";
+		} elseif ($request->day == "7") {
+			$day = "07";
+		} elseif ($request->day == "8") {
+			$day = "08";
+		} elseif ($request->day == "9") {
+			$day = "09";
+		} else {
+			$day = $request->day;
+		}
 		if (isset($sheet->rest_open_time) && isset($sheet->rest_close_time)) {
 			// $rest_time = explode("\n", $sheet->rest_time);
 			$shift = [
@@ -2637,7 +2659,7 @@ class CompanyController extends Controller
 				're' => ''
 			];
 		}
-		$attend["s".$request->day] = json_encode($shift);
+		$attend["s".$day] = json_encode($shift);
 		$attend->save();
 		return redirect()->route("company.attend_list_month");
 	}

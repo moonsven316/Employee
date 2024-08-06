@@ -61,6 +61,9 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2>会社概要</h2>
+                    @if ($password == true)
+                    <h2 class="text-danger">※パスワードは既定で「company1234」です。セキュリティのためにパスワードを変更します。</h2>
+                    @endif
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content" style="margin-left:7px">
@@ -326,12 +329,12 @@
                                     <span class="fa fa-envelope-o form-control-feedback left" aria-hidden="true"></span>
                                 </div>
 
-                                {{-- <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                <div class="col-md-12 col-sm-12  form-group has-feedback">
                                     <input type="password" class="form-control has-feedback-left" id="password" name="password"
                                         placeholder="パスワード" required="required">
                                     <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                                 </div>
-                                <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                {{-- <div class="col-md-12 col-sm-12  form-group has-feedback">
                                     <input type="password" class="form-control has-feedback-left" id="password_confirm" name="password_confirm"
                                         placeholder="パスワード確認" required="required">
                                     <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
@@ -342,34 +345,35 @@
                                     <span class="fa fa-group form-control-feedback left" aria-hidden="true"></span>
                                 </div>
 
-                                <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                {{-- <div class="col-md-12 col-sm-12  form-group has-feedback">
                                     <input type="tel" class="form-control has-feedback-left" id="seo_name" name="seo_name" placeholder="代表者名" required="required" value="{{ $company->seo_name }}">
                                     <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
-                                </div>
+                                </div> --}}
+                                
                                 <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                    <input type="text" class="form-control  has-feedback-left" data-inputmask="'mask' : '(999) 999-9999'" placeholder="電話番号" id="phone" name="phone" value="{{ $user->phone }}">
+                                    <input type="text" class="form-control  has-feedback-left" data-inputmask="'mask' : '999 9999 9999'" placeholder="電話番号" id="phone" name="phone" value="{{ $user->phone }}">
                                     <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
                                 </div>
                                 
 
                                 <div class="col-md-12 col-sm-12  form-group has-feedback">
                                     <div class="d-flex">
-                                        <input type="tel" class="form-control has-feedback-left" id="zip1" name="zip1" placeholder="652" required="required" value="{{ $user->zip1 }}" size="4" maxlength="3">                                 
-                                        <input type="tel" class="form-control has-feedback-left" id="zip2" name="zip2" placeholder="0042" required="required" value="{{ $user->zip2 }}" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');">                                 
+                                        <input type="tel" class="form-control has-feedback-left" id="zip1" name="zip1" placeholder="000" required="required" value="{{ $user->zip1 }}" size="4" maxlength="3">                                 
+                                        <input type="tel" class="form-control has-feedback-left" id="zip2" name="zip2" placeholder="0000" required="required" value="{{ $user->zip2 }}" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');">                                 
                                     </div>
                                     <span class="fa fa-filter form-control-feedback left" aria-hidden="true"></span>
                                 </div>
 
                                 <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                    <input type="tel" class="form-control has-feedback-left" id="pref" name="pref" placeholder="住所" required="required" value="{{ $user->pref }}">
+                                    <input type="tel" class="form-control has-feedback-left" id="pref" name="pref" placeholder="東京都" required="required" value="{{ $user->pref }}">
                                     <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                    <input type="tel" class="form-control has-feedback-left" id="addr" name="addr" placeholder="住所" required="required" value="{{ $user->addr }}">
+                                    <input type="tel" class="form-control has-feedback-left" id="addr" name="addr" placeholder="品川区" required="required" value="{{ $user->addr }}">
                                     <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                    <input type="tel" class="form-control has-feedback-left" id="str" name="str" placeholder="住所" required="required" value="{{ $user->str }}">
+                                    <input type="tel" class="form-control has-feedback-left" id="str" name="str" placeholder="0-0-0" required="required" value="{{ $user->str }}">
                                     <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
                                 </div>
 

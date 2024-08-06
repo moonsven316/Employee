@@ -60,7 +60,6 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        
         $credentials = $request->validate(
             [
                 'email' => ['required', 'email'],
@@ -75,14 +74,17 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
             if(Auth::user()->role == 0) {
                 
                 return redirect()->route('admin.dashboard');
 
             } else if(Auth::user()->role == 1) {
-
-                return redirect()->route('company.staff_list');
+                $user_id = Auth::user()->id;
+                if ($request->input("password") == "company1234") {
+                    return redirect()->route('company.company_profile', $user_id);
+                } else {
+                    return redirect()->route('company.staff_list');
+                }
 
             } else {
 
@@ -123,7 +125,7 @@ class LoginController extends Controller
             $details = $pwd[0];
         }
 
-        $details['pwr_url'] = 'https://xs017476.xsrv.jp/reset_pwd?token='. encrypt($pwd[0]['id']);
+        $details['pwr_url'] = 'https://xs717357.xsrv.jp//reset_pwd?token='. encrypt($pwd[0]['id']);
         $details['name'] = $pwd[0]['name'];
 
         Mail::to($details["email"])

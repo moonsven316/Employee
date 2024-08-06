@@ -34,7 +34,10 @@
                                     <div class="right">
                                         <h3>
                                             <a href="{{ route('company', $com->id) }}"@if (collect(explode('/', url()->current()))->last() == $com->id) style="color:#288cd7;" @endif>{{$com->company_name}}</a>
-                                            <small>15 人</small>
+                                            @php
+                                                $staff_count = App\Models\User::where('role', "2")->where('company_id', $com->id)->get();
+                                            @endphp
+                                            <small>{{ count($staff_count) }} 人</small>
                                         </h3>
                                         <?php 
                                             $companys = App\Models\User::where('company_id', $com->id)->where('role', 1)->first();
@@ -239,7 +242,7 @@
 //     });
 // }
 function company_delete(id) {
-    if (confirm("Are you sure you want to proceed?")) {
+    if (confirm("選択した会社を削除してもよろしいですか?")) {
         $.ajax({
             url: "{{ route('company_delete') }}",
             method: 'post',

@@ -52,12 +52,31 @@
                                                         <span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-8 col-sm-8 ">
-                                                        <div class="col-md-12 col-sm-12 p-0 pb-1">
-                                                            <input type="text" id="post_code" name="post_code" required="required" data-inputmask="'mask' : '999-9999'" class="form-control" value="{{ $admin->post_code }}">
+                                                        <div class="d-flex">
+                                                            <input type="tel" class="form-control has-feedback-left" id="zip1" name="zip1" placeholder="000" required="required" value="{{ $admin->zip1 }}" size="4" maxlength="3">                                 
+                                                            <input type="tel" class="form-control has-feedback-left" id="zip2" name="zip2" placeholder="0000" required="required" value="{{ $admin->zip2 }}" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');">                                 
                                                         </div>
-                                                        <div class="col-md-12 col-sm-12 p-0">
-                                                            <input type="text" id="address" name="address" required="required" class="form-control" value="{{ $admin->address }}">
-                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name"></label>
+                                                    <div class="col-md-8 col-sm-8 ">
+                                                        <input type="tel" class="form-control has-feedback-left" id="pref" name="pref" placeholder="東京都" required="required" value="{{ $admin->pref }}">
+                                                        <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name"></label>
+                                                    <div class="col-md-8 col-sm-8 ">
+                                                        <input type="tel" class="form-control has-feedback-left" id="addr" name="addr" placeholder="品川区" required="required" value="{{ $admin->addr }}">
+                                                        <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name"></label>
+                                                    <div class="col-md-8 col-sm-8 ">
+                                                        <input type="tel" class="form-control has-feedback-left" id="str" name="str" placeholder="0-0-0" required="required" value="{{ $admin->str }}">
+                                                        <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -75,7 +94,7 @@
                                                         <span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-8 col-sm-8 ">
-                                                        <input type="text" id="phone" name="phone" required="required" data-inputmask="'mask' : '(999) 999-9999'" class="form-control" value="{{ $admin->phone }}">
+                                                        <input type="text" id="phone" name="phone" required="required" data-inputmask="'mask' : '999 9999 9999'" class="form-control" value="{{ $admin->phone }}">
                                                     </div>
                                                 </div>
                                             </div>

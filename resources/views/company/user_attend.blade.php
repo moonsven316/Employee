@@ -191,8 +191,8 @@
                                         $yo = "(日)";
                                         $d = $month.'/'.$day.$yo;
                                     }
-                                    $sh = json_decode($attend["s".$day-0]);
-                                    $ah = json_decode($attend["a".$day-0]);
+                                    $sh = json_decode($attend["s".$day]);
+                                    $ah = json_decode($attend["a".$day]);
                                     $today = date('d');
                                     $attend_status = "";
                                     $sel_sheet = "";
@@ -235,9 +235,9 @@
                                             $shiftTime = "00:00 ~ 00:00";
                                         }
                                     }
-                                    if($attend["s".$day-0] == "" && $attend["a".$day-0] == ""){
+                                    if($attend["s".$day] == "" && $attend["a".$day] == ""){
                                         $attend_status = `<div></div>`;
-                                    } elseif ($attend["s".$day-0] !="" && $attend["a".$day-0] == "") {
+                                    } elseif ($attend["s".$day] !="" && $attend["a".$day] == "") {
                                         if ($sh->ot != "" && $sh->ct != "") {
                                             if ($user->status == 1) {
                                                 $attend_status = "<div style='color:#fff; font-size:15px; padding: 10px 0px 10px 0px; background-color: rgb(225, 255, 0);'>休職</div>";
@@ -405,7 +405,28 @@
                                         }
                                     }
                                     $note_ = json_decode($attend["notes"]);
-                                    $key = 'a' . ($i + 1);
+                                    $key_num = $i + 1;
+                                    if ($key_num == "1") {
+                                        $key = 'a01';
+                                    } elseif ($key_num == "2") {
+                                        $key = 'a02';
+                                    } elseif ($key_num == "3") {
+                                        $key = 'a03';
+                                    } elseif ($key_num == "4") {
+                                        $key = 'a04';
+                                    } elseif ($key_num == "5") {
+                                        $key = 'a05';
+                                    } elseif ($key_num == "6") {
+                                        $key = 'a06';
+                                    } elseif ($key_num == "7") {
+                                        $key = 'a07';
+                                    } elseif ($key_num == "8") {
+                                        $key = 'a08';
+                                    } elseif ($key_num == "9") {
+                                        $key = 'a09';
+                                    } else {
+                                        $key = 'a'.$key_num;
+                                    }
                                     $note = $note_->$key; 
                                     $i++;
                                 ?>

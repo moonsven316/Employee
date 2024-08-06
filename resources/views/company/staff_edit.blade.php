@@ -194,9 +194,9 @@
                                                         <div class="col-md-8 col-sm-8 ">
                                                             <div class="col-md-12 col-sm-12 p-0 pb-1 d-flex">
                                                                 {{-- <input type="text" id="post_code" name="post_code" required="required" data-inputmask="'mask' : '999-9999'" class="form-control" value="{{ $staff->post_code }}"> --}}
-                                                                <input type="text" name="zip1" size="4" maxlength="3" class="form-control" value="{{ $staff->zip1 }}">
+                                                                <input type="text" name="zip1" placeholder="000" size="4" maxlength="3" class="form-control" value="{{ $staff->zip1 }}">
                                                                 <span>－</span>
-                                                                <input class="form-control" type="text" name="zip2" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');"  value="{{ $staff->zip2 }}">
+                                                                <input class="form-control" type="text" name="zip2" placeholder="0000" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');"  value="{{ $staff->zip2 }}">
                                                             </div>
                                                             @error('zip1')
                                                                 <span class="text-danger">郵便番号はすでに取られています。</span><br>
@@ -213,19 +213,19 @@
                                                         <div class="col-md-8 col-sm-8 ">
                                                             <div class="col-md-12 col-sm-12 p-0">
                                                                 <div class="col-md-12 col-sm-12 p-0 pb-1">
-                                                                    <input class="form-control" type="text" name="pref" value="{{ $staff->pref }}">
+                                                                    <input class="form-control" type="text" name="pref" placeholder="東京都" value="{{ $staff->pref }}">
                                                                     @error('pref')
                                                                         <span class="text-danger">この項目は必須です。</span>
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-md-12 col-sm-12 p-0 pb-1">
-                                                                    <input class="form-control" type="text" name="addr" value="{{ $staff->addr }}">
+                                                                    <input class="form-control" type="text" name="addr" placeholder="品川区" value="{{ $staff->addr }}">
                                                                     @error('addr')
                                                                         <span class="text-danger">この項目は必須です。</span>
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-md-12 col-sm-12 p-0">
-                                                                    <input class="form-control" type="text" name="str" value="{{ $staff->str }}">
+                                                                    <input class="form-control" type="text" name="str" placeholder="0-0-0" value="{{ $staff->str }}">
                                                                     @error('str')
                                                                         <span class="text-danger">この項目は必須です。</span>
                                                                     @enderror
@@ -249,7 +249,7 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8 ">
-                                                            <input type="text" id="phone" name="phone" required="required" data-inputmask="'mask' : '(999) 999-9999'" class="form-control" value="{{ $staff->phone }}">
+                                                            <input type="text" id="phone" name="phone" required="required" data-inputmask="'mask' : '999 9999 9999'" class="form-control" value="{{ $staff->phone }}">
                                                         </div>
                                                     </div>
                                                 </div>

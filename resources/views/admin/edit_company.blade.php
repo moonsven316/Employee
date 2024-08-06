@@ -344,29 +344,29 @@
                                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                     </div>
                                     <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                        <input type="text" class="form-control  has-feedback-left" data-inputmask="'mask' : '(999) 999-9999'" placeholder="電話番号" id="phone" name="phone" value="{{ $user->phone }}">
+                                        <input type="text" class="form-control  has-feedback-left" data-inputmask="'mask' : '999 9999 9999'" placeholder="電話番号" id="phone" name="phone" value="{{ $user->phone }}">
                                         <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
                                     </div>
                                     
     
                                     <div class="col-md-12 col-sm-12  form-group has-feedback">
                                         <div class="d-flex">
-                                            <input type="text" class="form-control has-feedback-left" id="zip1" name="zip1" placeholder="652" required="required" size="4" maxlength="3" value="{{ $user->zip1 }}">                   
-                                            <input type="text" class="form-control has-feedback-left" id="zip2" name="zip2" placeholder="0047" required="required" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');" size="5" maxlength="4" value="{{ $user->zip2 }}">                            
+                                            <input type="text" class="form-control has-feedback-left" id="zip1" name="zip1" placeholder="000" required="required" size="4" maxlength="3" value="{{ $user->zip1 }}">                   
+                                            <input type="text" class="form-control has-feedback-left" id="zip2" name="zip2" placeholder="0000" required="required" onKeyUp="AjaxZip3.zip2addr('zip1','zip2','pref','addr','str');" size="5" maxlength="4" value="{{ $user->zip2 }}">                            
                                         </div>
                                         <span class="fa fa-filter form-control-feedback left" aria-hidden="true"></span>
                                     </div>
         
                                     <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                        <input type="tel" class="form-control has-feedback-left" id="pref" name="pref" placeholder="兵庫県" required="required" value="{{ $user->pref }}">
+                                        <input type="tel" class="form-control has-feedback-left" id="pref" name="pref" placeholder="東京都" required="required" value="{{ $user->pref }}">
                                         <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
                                     </div>
                                     <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                        <input type="tel" class="form-control has-feedback-left" id="addr" name="addr" placeholder="神戸市兵庫区" required="required" value="{{ $user->addr }}">
+                                        <input type="tel" class="form-control has-feedback-left" id="addr" name="addr" placeholder="品川区" required="required" value="{{ $user->addr }}">
                                         <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
                                     </div>
                                     <div class="col-md-12 col-sm-12  form-group has-feedback">
-                                        <input type="tel" class="form-control has-feedback-left" id="str" name="str" placeholder="下沢通" required="required" value="{{ $user->str }}">
+                                        <input type="tel" class="form-control has-feedback-left" id="str" name="str" placeholder="0-0-0" required="required" value="{{ $user->str }}">
                                         <span class="fa fa-building form-control-feedback left" aria-hidden="true"></span>
                                     </div>
     

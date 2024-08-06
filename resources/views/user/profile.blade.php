@@ -209,7 +209,7 @@
                                                 </label>
                                                 <div class="col-md-8 col-sm-8 ">
                                                     <input type="text" id="phone" name="phone" required="required"
-                                                        data-inputmask="'mask' : '(999) 999-9999'" class="form-control  " value="{{ $user->phone }}">
+                                                        data-inputmask="'mask' : '999 9999 9999'" class="form-control  " value="{{ $user->phone }}">
                                                 </div>
                                             </div>
                                         </div>

@@ -77,12 +77,12 @@
                                         {{-- <li><a href="#">その他</a></li> --}}
                                     </ul>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <a><i class="fa fa-user"></i> ユーザー管理 <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         
                                     </ul>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                         <ul class=" navbar-right">
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('avatars/default.png')}}" alt="">{{ Auth::user()->name; }}
+                                    <img src="{{ asset('avatars/default.png')}}" alt="">{{ Auth::user()->user_name; }}
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right"
                                     aria-labelledby="navbarDropdown">
