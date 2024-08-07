@@ -570,7 +570,27 @@
         });
         function get_att_data(id, day) {
             $("#att_id").val(id);
+            if (day == 1) {
+                day = "01";
+            } else if (day == 2) {
+                day = "02";
+            } else if (day == 3) {
+                day = "03";
+            } else if (day == 4) {
+                day = "04";
+            } else if (day == 5) {
+                day = "05";
+            } else if (day == 6) {
+                day = "06";
+            } else if (day == 7) {
+                day = "07";
+            } else if (day == 8) {
+                day = "08";
+            } else if (day == 9) {
+                day = "09";
+            }
             $("#att_day").val(day);
+            console.log(day);
             var d = "{{ $today_data }}";
             $.ajax({
                 url: "{{ route('company.get_attend_data') }}",

@@ -397,42 +397,42 @@
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="hourly_wage">時給</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="hourly_wage" name="hourly_wage" class="form-control" value="{{ isset($salary->hourly_wage) ? number_format($salary->hourly_wage) : 0 }}" disabled="disabled">
+                                                    <input type="text" id="hourly_wage" name="hourly_wage" class="form-control" value="{{ isset($salary->hourly_wage) ? $salary->hourly_wage : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
                                             
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="basic_allowance">基本給</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="basic_allowance" name="basic_allowance" class="form-control" value="{{ isset($salary->basic_allowance) ? number_format($salary->basic_allowance) : 0 }}" disabled="disabled">
+                                                    <input type="text" id="basic_allowance" name="basic_allowance" class="form-control" value="{{ isset($salary->basic_allowance) ? $salary->basic_allowance : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="business_allowance">業務手当</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="business_allowance" name="business_allowance" class="form-control" value="{{ isset($salary->business_allowance) ? number_format($salary->business_allowance) : 0 }}" disabled="disabled">
+                                                    <input type="text" id="business_allowance" name="business_allowance" class="form-control" value="{{ isset($salary->business_allowance) ? $salary->business_allowance : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="position_allowance">役職手当</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="position_allowance" name="position_allowance" class="form-control" value="{{ isset($salary->position_allowance) ? number_format($salary->position_allowance) : 0 }}" disabled="disabled">
+                                                    <input type="text" id="position_allowance" name="position_allowance" class="form-control" value="{{ isset($salary->position_allowance) ? $salary->position_allowance : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="technical_allowance">技術手当</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="technical_allowance" name="technical_allowance" class="form-control" value="{{ isset($salary->technical_allowance) ? number_format($salary->technical_allowance) : 0 }}" disabled="disabled">
+                                                    <input type="text" id="technical_allowance" name="technical_allowance" class="form-control" value="{{ isset($salary->technical_allowance) ? $salary->technical_allowance : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
         
                                             <div class="item form-group">
                                                 <label class="control-label  col-md-3 col-sm-3 label-align" for="adjustment_allowance">出向調整金</label>
                                                 <div class="col-md-6 col-sm-6 ">
-                                                    <input type="number" id="adjustment_allowance" name="adjustment_allowance" class="form-control" value="{{ isset($salary->adjustment_allowance) ? number_format($salary->adjustment_allowance) : 0 }}" disabled="disabled">
+                                                    <input type="text" id="adjustment_allowance" name="adjustment_allowance" class="form-control" value="{{ isset($salary->adjustment_allowance) ? $salary->adjustment_allowance : 0 }}" disabled="disabled">
                                                 </div>
                                             </div>
                                             <div id="item_list">
@@ -443,7 +443,7 @@
                                                             <label class="control-label  col-md-3 col-sm-3 label-align" for="adjustment_allowance">{{ $label }}</label>
                                                         {{-- </div> --}}
                                                         <div class="col-md-6 col-sm-6 ">
-                                                            <input type="number" name="update_item_content_{{$loop->iteration}}" id="update_item_content_{{$loop->iteration}}" class="form-control" value="{{ $content }}" disabled="disabled">
+                                                            <input type="text" name="update_item_content_{{$loop->iteration}}" id="update_item_content_{{$loop->iteration}}" class="form-control" value="{{ $content }}" disabled="disabled">
                                                         </div>
                                                     </div>
                                                 @endforeach

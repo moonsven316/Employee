@@ -726,7 +726,7 @@
                             <input type="text" name="item_label_${j}" id="item_label_${j}" class="form-control">
                         </div>
                         <div class="col-md-6 col-sm-6 ">
-                            <input type="number" name="item_content_${j}" id="item_content_${j}" class="form-control" value="0">
+                            <input type="text" name="item_content_${j}" id="item_content_${j}" class="form-control test" value="0">
                         </div>
                         <div class="col-md-3">
                             <a href="javascript:void(0);" id="removeAdditem">

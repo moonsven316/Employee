@@ -213,6 +213,25 @@
                                                 $minutes = 0;
                                                 for($i = 1; $i < $numberOfDays +1; $i++){
                                                     $txt = "";
+                                                    if ($i == 1) {
+                                                        $i = "01";
+                                                    } elseif ($i == 2) {
+                                                        $i = "02";
+                                                    } elseif ($i == 3) {
+                                                        $i = "03";
+                                                    } elseif ($i == 4) {
+                                                        $i = "04";
+                                                    } elseif ($i == 5) {
+                                                        $i = "05";
+                                                    } elseif ($i == 6) {
+                                                        $i = "06";
+                                                    } elseif ($i == 7) {
+                                                        $i = "07";
+                                                    } elseif ($i == 8) {
+                                                        $i = "08";
+                                                    } elseif ($i == 9) {
+                                                        $i = "09";
+                                                    }
                                                     $sh = json_decode($att["s".$i]);
                                                     $ah = json_decode($att["a".$i]);
         

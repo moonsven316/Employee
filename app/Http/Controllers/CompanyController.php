@@ -2138,6 +2138,7 @@ class CompanyController extends Controller
 				}
 				$dep_arr[$department->id] = $subdepart_ids;
 			}
+			// dd($dep_arr);
 			$today = date("y-m-d");
 			$departhistory = new Departhistory;
 			$departhistory->company_id = $company->id;
