@@ -10,7 +10,7 @@
             <a href="{{ route('top') }}" <?php if(strpos(url()->current(), "top")) echo 'class="nav-item nav-link active"'; else echo 'class="nav-item nav-link"';?>>TOP</a>
             <a href="{{ route('plan') }}" <?php if(strpos(url()->current(), "plan")) echo 'class="nav-item nav-link active"'; else echo 'class="nav-item nav-link"';?>>料金</a>
             <a href="{{ route('contact') }}" <?php if(strpos(url()->current(), "contact")) echo 'class="nav-item nav-link active"'; else echo 'class="nav-item nav-link"';?>>コンタクト</a>
-            {{-- <a href="service.html" class="nav-item nav-link">ヘルプ</a> --}}
+            <a href="{{ route('guide') }}" <?php if(strpos(url()->current(), "guide")) echo 'class="nav-item nav-link active"'; else echo 'class="nav-item nav-link"';?>>ガイド</a>
         </div>
         {{-- <butaton type="button" class="btn text-primary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></butaton> --}}
         <a href="{{ route('login') }}" class="btn btn-primary py-2 px-4 ms-3">ログイン</a>

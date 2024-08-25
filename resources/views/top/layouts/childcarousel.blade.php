@@ -13,6 +13,8 @@
                         echo '料金';
                     } elseif(strpos(url()->current(), "contact")) {
                         echo 'コンタクト';
+                    } elseif(strpos(url()->current(), "guide")) {
+                        echo 'ガイド';
                     }
                 @endphp
             </h1>
@@ -24,6 +26,8 @@
                         echo '料金';
                     } elseif(strpos(url()->current(), "contact")) {
                         echo 'コンタクト';
+                    } elseif(strpos(url()->current(), "guide")) {
+                        echo 'ガイド';
                     }
                 @endphp
             </a>

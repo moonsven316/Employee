@@ -4,8 +4,8 @@
             <img class="w-100" src="{{ asset('assets/startup-website-template/img/carousel-1.jpeg') }}" alt="Image">
             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                 <div class="p-3" style="max-width: 900px;">
-                    <h5 class="text-white text-uppercase mb-3 animated slideInDown">Kentai勤怠</h5>
-                    <h1 class="display-1 text-white mb-md-4 animated zoomIn">月額1000円から始められる勤怠管理システム</h1>
+                    <h5 class="text-white text-uppercase mb-3 animated slideInDown">Kintai勤怠</h5>
+                    <h2 class="display-1 text-white mb-md-4 animated zoomIn">月額1000円から始められる勤怠管理システム</h2>
                     <a href="quote.html" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">今すぐ無料で試してみる</a>
                     <a href="" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">お問い合わせ</a>
                 </div>
@@ -15,8 +15,8 @@
             <img class="w-100" src="{{ asset('assets/startup-website-template/img/carousel-2.jpeg') }}" alt="Image">
             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                 <div class="p-3" style="max-width: 900px;">
-                    <h5 class="text-white text-uppercase mb-3 animated slideInDown">Kentai勤怠</h5>
-                    <h1 class="display-1 text-white mb-md-4 animated zoomIn">月額1000円から始められる勤怠管理システム</h1>
+                    <h5 class="text-white text-uppercase mb-3 animated slideInDown">Kintai勤怠</h5>
+                    <h2 class="display-1 text-white mb-md-4 animated zoomIn">月額1000円から始められる勤怠管理システム</h2>
                     <a href="quote.html" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">今すぐ無料で試してみる</a>
                     <a href="" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">お問い合わせ</a>
                 </div>

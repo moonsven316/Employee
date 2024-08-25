@@ -164,7 +164,7 @@
                                 <a class="text-light mb-2" href="{{ route('plan') }}"><i class="bi bi-arrow-right text-primary me-2"></i>料金</a>
                                 <a class="text-light mb-2" href="{{ route('contact') }}"><i class="bi bi-arrow-right text-primary me-2"></i>コンタクト</a>
                                 <a class="text-light mb-2" href="{{ route('login') }}"><i class="bi bi-arrow-right text-primary me-2"></i>ログイン</a>
-                                <a class="text-light mb-2" target="_blank" href="https://docs.google.com/document/d/1zCIPi3GrGr-I1dzzTf61idKcDOjnTPJxsaeu8zJ_-yE/edit"><i class="bi bi-arrow-right text-primary me-2"></i>ガイド</a>
+                                <a class="text-light mb-2" href="{{ route('guide') }}"><i class="bi bi-arrow-right text-primary me-2"></i>ガイド</a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">

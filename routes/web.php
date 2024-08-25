@@ -143,4 +143,5 @@ Route::get('/', function(){ return view('top.top'); });
 Route::get('/top', function(){ return view('top.top'); })->name('top');
 Route::get('/plan', function(){ return view('top.plan'); })->name('plan');
 Route::get('/contact', function() { return view('top.contact'); })->name('contact');
+Route::get('/guide', function() { return view('top.useguide'); })->name('guide');
 Route::get('/login', function(){ return view('auth.login'); })->name('login');
