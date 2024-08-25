@@ -469,8 +469,9 @@
 </div>
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-sm">
-        <form action="{{ route("company.attend_update") }}" method="post" id="timeForm">
-            @csrf
+        {{-- <form action="{{ route("company.attend_update") }}" method="post" id="timeForm">
+            @csrf --}}
+        <div id="timeForm">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel2">勤務状況変更</h4>
@@ -541,10 +542,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
-                    <button type="submit" class="btn btn-primary">適用</button>
+                    <button type="button" class="btn btn-primary" onclick="attend_update()">適用</button>
                 </div>
             </div>
-        </form>
+        </div>
+        {{-- </form> --}}
     </div>
 </div>
 @endsection
@@ -649,16 +651,48 @@
                 }
             });
         }
-        document.getElementById('timeForm').addEventListener('submit', function(event) {
-            const timeValue = timeInput.value;
-            const errorMessage = document.getElementById('error-message');
+        function attend_update() {
+            const startTimeInput = document.getElementById('rest_start_time');
+            const endTimeInput = document.getElementById('rest_end_time');
+            const minTime = document.getElementById('shift_open_time').value;
+            const maxTime = document.getElementById('shift_close_time').value;
+            const startTimeValue = startTimeInput.value;
+            const endTimeValue = endTimeInput.value;
             
-            if (timeValue < minTime || timeValue > maxTime) {
+            if (startTimeValue < minTime || startTimeValue > maxTime) {
+                alert("Start time must be between " + minTime + " and " + maxTime);
                 event.preventDefault();
-                errorMessage.textContent = `Please choose a time between ${minTime} and ${maxTime}.`;
+            } else if (endTimeValue > minTime || endTimeValue < maxTime) {
+                alert("End time must be between " + minTime + " and " + maxTime);
+                event.preventDefault();
             } else {
-                errorMessage.textContent = '';
+                $.ajax({
+                    url: "{{ route('company.attend_update') }}",
+                    method: 'post',
+                    data: {
+                        'att_id': $("#att_id").val(),
+                        'att_day': $("#att_day").val(),
+                        'shift_open_time': $("#shift_open_time").val(),
+                        'shift_close_time': $("#shift_close_time").val(),
+                        'open_time': $("#open_time").val(),
+                        'close_time': $("#close_time").val(),
+                        'rest_start_time': $("#rest_start_time").val(),
+                        'rest_end_time': $("#rest_end_time").val(),
+                        'note': $("#note").val()
+                    },
+                    success: function(data) {
+                        if (data === "ok") {
+                            location.reload();
+                        } else {
+                            console.error("Unexpected response:", data);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
             }
-        });
+        }
     </script>
 @endsection

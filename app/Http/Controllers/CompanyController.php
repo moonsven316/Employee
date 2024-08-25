@@ -2609,7 +2609,7 @@ class CompanyController extends Controller
 			$update_attend["a".$request->att_day] = json_encode($attend_data);
 			$update_attend->save();
 		}
-		return back();
+		return "ok";
 	}
 
 	public function shift_set(Request $request) {

@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Auth\RegisterController;
-
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CompanyController;
@@ -11,8 +9,6 @@ use App\Http\Controllers\ExsettingController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MypageController;
 use App\Http\Controllers\AttendanceController;
-
-
 
 // Authentication Routes
 Route::get('/profile/{id}', [LoginController::class, 'profile'])->name('profile');
@@ -29,7 +25,6 @@ Route::get('reset_password', [LoginController::class, 'resetPwd'])->name('reset'
 Route::get('reset_pwd', [LoginController::class, 'resetView'])->name('reset_pwd');
 Route::post('update_password', [LoginController::class, 'updatePwd'])->name('password.update');
 Route::get('/mypage/item_add', [MypageController::class, 'item_add'])->name('mypage.tem_add');
-
 // Admin Routes
 Route::group(['middleware' => ['auth', 'admin']], function() {
 	Route::prefix('admin')->group(function() {
@@ -55,7 +50,6 @@ Route::group(['middleware' => ['auth', 'admin']], function() {
 		Route::post('/file_upload', [AdminController::class, 'file_upload'])->name('admin.file_upload');
 	});
 });
-
 // Main Routes
 Route::group(['middleware' => ['auth', 'company.admin']], function() {
 	Route::prefix('company')->group(function() {
@@ -137,6 +131,7 @@ Route::group(['middleware' => ['auth', 'company.admin']], function() {
 		Route::post('/return_leave',[CompanyController::class, 'return_leave'])->name('company.return_leave');
 	});
 });
+
 Route::group(['middleware' => ['auth', 'user']], function() {
 	Route::prefix('user')->group(function() {
 		Route::get('/stamp', function() { return view('user.attendance_stamp'); })->name('stamp');
@@ -144,4 +139,8 @@ Route::group(['middleware' => ['auth', 'user']], function() {
 	});
 });
 
-Route::get('/', function(){ return view('auth.login'); });
+Route::get('/', function(){ return view('top.top'); });
+Route::get('/top', function(){ return view('top.top'); })->name('top');
+Route::get('/plan', function(){ return view('top.plan'); })->name('plan');
+Route::get('/contact', function() { return view('top.contact'); })->name('contact');
+Route::get('/login', function(){ return view('auth.login'); })->name('login');

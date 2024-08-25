@@ -34,8 +34,10 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 col-12">
-                    <a class="reset_pass" href="{{ route('forgot') }}">パスワードをお忘れですか？</a>
-                    {{-- <a class="reset_pass mx-5" href="#signup">打刻受付</a> --}}
+                    <div class="d-flex">
+                        <a class="reset_pass" href="{{ route('forgot') }}">パスワードをお忘れですか？</a>
+                        <a class="reset_pass mx-4" href="{{ route('top') }}">TOPページ</a>
+                    </div>
                 </div>
             </form>
         </div>
