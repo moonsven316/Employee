@@ -135,6 +135,7 @@ Route::group(['middleware' => ['auth', 'company.admin']], function() {
 Route::group(['middleware' => ['auth', 'user']], function() {
 	Route::prefix('user')->group(function() {
 		Route::get('/stamp', function() { return view('user.attendance_stamp'); })->name('stamp');
+		Route::get('/profile/{id}', [LoginController::class, 'profile'])->name('profile');
 		Route::post('/attendance_work', [AttendanceController::class, 'attendance'])->name('attendance_work');
 	});
 });

@@ -13,6 +13,7 @@
     <title>{{ env('APP_NAME') }}</title>
 
     <meta name="description" content="" />
+    <link href="{{ asset('assets/img/favicon/favicon.png') }}" rel="icon">
 
     <!-- Bootstrap -->
     <link href="{{ asset('assets/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">

@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) BEGIN-->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4CLB0J7TR"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'G-G4CLB0J7TR');
+	</script>
+	<!-- Google tag (gtag.js) END -->
     <meta charset="utf-8">
     <title>{{ env('APP_NAME') }}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
+    <meta name="google-site-verification" content="lP7rjVYqiqXvziap8WJwrQgCnLrwcUu0O5QkHhmQ2DQ" />
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="{{ asset('assets/img/favicon/favicon.png') }}" rel="icon">
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
